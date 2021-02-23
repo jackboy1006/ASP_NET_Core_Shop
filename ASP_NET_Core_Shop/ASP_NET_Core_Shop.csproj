@@ -49,9 +49,6 @@
     <None Include="wwwroot\bootstrap-5.0.0-beta2-dist\js\bootstrap.js.map" />
     <None Include="wwwroot\bootstrap-5.0.0-beta2-dist\js\bootstrap.min.js" />
     <None Include="wwwroot\bootstrap-5.0.0-beta2-dist\js\bootstrap.min.js.map" />
-    <None Include="wwwroot\Images\1939 Ford Sedan.jpg" />
-    <None Include="wwwroot\Images\1965 Shelby Cobra Daytona Coupe %28Replica%29.jpg" />
-    <None Include="wwwroot\Images\2006 Yamaha Roadliner.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,6 +61,17 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties wwwroot_4bootstrap-5_10_10-beta2-dist_4css_4bootstrap_1css_1map__JsonSchema="" /></VisualStudio></ProjectExtensions>
+  <ItemGroup>
+    <Content Update="Views\Shop\Login.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\freshshop\fonts\" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>

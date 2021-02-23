@@ -22,5 +22,27 @@ namespace ASP_NET_Core_Shop.Controllers
 			return View();
         }
 
+		public IActionResult Login()
+		{
+			return View();
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Login(User _user)
+		{
+			return Content(_user.UserName + "," + _user.Password);
+		}
+
+		public IActionResult SignUp()
+		{
+			return View();
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult SignUp(User _user)
+		{
+			return Content(_user.UserName + "," + _user.Password + "," + _user.FullName + "," + _user.Email);
+		}
+
 	}
 }

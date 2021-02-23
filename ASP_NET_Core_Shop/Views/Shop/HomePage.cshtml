@@ -15,7 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Bootstrap core CSS -->
-    <link href="/bootstrap-5.0.0-beta2-dist/js/bootstrap.min.js" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link href="~/bootstrap-5.0.0-beta2-dist/js/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <style>
         /* Make the image fully responsive */
         .carousel-inner img {
@@ -38,7 +38,13 @@
         }
     </style>
     <!-- Custom styles for this template -->
-    <link href="/css/carousel.css" rel="stylesheet">
+    <link href="~/css/carousel.css" rel="stylesheet">
+    <!-- Site CSS -->
+    <link href="~/freshshop/css/style.css" rel="stylesheet">
+    <!-- Responsive CSS -->
+    <link href="~/freshshop/css/responsive.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="~/freshshop/css/custom.css" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -62,12 +68,12 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">會員</a>
                             <ul class="dropdown-menu" aria-labelledby="dropdown01">
-                                <li><a class="dropdown-item" href="#">登入</a></li>
+                                <li>@Html.ActionLink("登入", "Login", "Shop", new { }, new { @class = "dropdown-item" })</li>
                                 <li><a class="dropdown-item" href="#">註冊</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">會員登入</a>
+                            <a class="nav-link" href="">會員登入</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">未啟用</a>
@@ -94,13 +100,13 @@
         <!-- The slideshow -->
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="/Images/1939 Ford Sedan.jpg" alt="Los Angeles" width="1100" height="500">
+                <img src="/Images/Products/pexels-any-lane-5945560.jpg" alt="Los Angeles" width="1100" height="500">
             </div>
             <div class="carousel-item">
-                <img src="/Images/1965 Shelby Cobra Daytona Coupe (Replica).jpg" alt="Chicago" width="1100" height="500">
+                <img src="/Images/Products/pexels-lucie-liz-3957500.jpg" alt="Chicago" width="1100" height="500">
             </div>
             <div class="carousel-item">
-                <img src="/Images/2006 Yamaha Roadliner.jpg" alt="New York" width="1100" height="500">
+                <img src="/Images/Products/pexels-marta-dzedyshko-2067621.jpg" width="1100" height="500">
             </div>
         </div>
 
@@ -118,27 +124,98 @@
             <!-- Three columns of text below the carousel -->
             <div class="row">
                 <div class="col-lg-4">
-                    <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
-
-                    <h2>Heading</h2>
-                    <p>Some representative placeholder content for the three columns of text below the carousel. This is the first column.</p>
+                    @*<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>*@
+                    <img src="/Images/HomePage/pexels-pixabay-265242.jpg" alt="Fresh" width="320" height="210" />
+                    <h2>嚴選天然食材</h2>
+                    <p>每一口都能感受天然香氣，且健康無負擔!</p>
                     <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-                </div><!-- /.col-lg-4 -->
+                </div>
                 <div class="col-lg-4">
-                    <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
-
-                    <h2>Heading</h2>
-                    <p>Another exciting bit of representative placeholder content. This time, we've moved on to the second column.</p>
+                    @*<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>*@
+                    <img src="/Images/HomePage/pexels-daria-shevtsova-1070946.jpg" alt="MuiltType" width="320" height="210" />
+                    <h2>多樣化的選擇</h2>
+                    <p>滿足您的各種需求與任性又挑剔的味蕾</p>
                     <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-                </div><!-- /.col-lg-4 -->
+                </div>
                 <div class="col-lg-4">
-                    <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+                    @*<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777" /><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>*@
 
-                    <h2>Heading</h2>
-                    <p>And lastly this, the third column of representative placeholder content.</p>
+                    <img src="/Images/HomePage/pexels-artem-podrez-5025654.jpg" alt="ShipServies" width="320" height="210" />
+                    <h2>快速新鮮送達</h2>
+                    <p>當天出爐，當天送達，堅持讓您品嚐最佳風味!</p>
                     <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-                </div><!-- /.col-lg-4 -->
-            </div><!-- /.row -->
+                </div>
+            </div>
+            <!-- Start Blog  -->
+            <div class="latest-blog">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="title-all text-center">
+                                <h1>latest blog</h1>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4 col-xl-4">
+                            <div class="blog-box">
+                                <div class="blog-img">
+                                    <img class="img-fluid" src="/Images/HomePage/pexels-pixabay-265242.jpg" alt="" />
+                                </div>
+                                <div class="blog-content">
+                                    <div class="title-blog">
+                                        <h3>Fusce in augue non nisi fringilla</h3>
+                                        <p>Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.</p>
+                                    </div>
+                                    <ul class="option-blog">
+                                        <li><a href="#"><i class="far fa-heart"></i></a></li>
+                                        <li><a href="#"><i class="fas fa-eye"></i></a></li>
+                                        <li><a href="#"><i class="far fa-comments"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 col-xl-4">
+                            <div class="blog-box">
+                                <div class="blog-img">
+                                    <img class="img-fluid" src="/Images/HomePage/pexels-daria-shevtsova-1070946.jpg" alt="" />
+                                </div>
+                                <div class="blog-content">
+                                    <div class="title-blog">
+                                        <h3>Fusce in augue non nisi fringilla</h3>
+                                        <p>Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.</p>
+                                    </div>
+                                    <ul class="option-blog">
+                                        <li><a href="#"><i class="far fa-heart"></i></a></li>
+                                        <li><a href="#"><i class="fas fa-eye"></i></a></li>
+                                        <li><a href="#"><i class="far fa-comments"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 col-xl-4">
+                            <div class="blog-box">
+                                <div class="blog-img">
+                                    <img class="img-fluid" src="/Images/HomePage/pexels-artem-podrez-5025654.jpg" alt="" />
+                                </div>
+                                <div class="blog-content">
+                                    <div class="title-blog">
+                                        <h3>Fusce in augue non nisi fringilla</h3>
+                                        <p>Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.</p>
+                                    </div>
+                                    <ul class="option-blog">
+                                        <li><a href="#"><i class="far fa-heart"></i></a></li>
+                                        <li><a href="#"><i class="fas fa-eye"></i></a></li>
+                                        <li><a href="#"><i class="far fa-comments"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Blog  -->
             <!-- START THE FEATURETTES -->
 
             <hr class="featurette-divider">
@@ -192,7 +269,22 @@
         </footer>
     </main>
 
-    <script src="/bootstrap-5.0.0-beta2-dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-
+    <script src="/bootstrap-5.0.0-beta2-dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- ALL JS FILES -->
+    <script src="~/freshshop/js/jquery-3.2.1.min.js"></script>
+    <script src="~/freshshop/js/popper.min.js"></script>
+    <script src="~/freshshop/js/bootstrap.min.js"></script>
+    <!-- ALL PLUGINS -->
+    <script src="~/freshshop/js/jquery.superslides.min.js"></script>
+    <script src="~/freshshop/js/bootstrap-select.js"></script>
+    <script src="~/freshshop/js/inewsticker.js"></script>
+    <script src="~/freshshop/js/bootsnav.js."></script>
+    <script src="~/freshshop/js/images-loded.min.js"></script>
+    <script src="~/freshshop/js/isotope.min.js"></script>
+    <script src="~/freshshop/js/owl.carousel.min.js"></script>
+    <script src="~/freshshop/js/baguetteBox.min.js"></script>
+    <script src="~/freshshop/js/form-validator.min.js"></script>
+    <script src="~/freshshop/js/contact-form-script.js"></script>
+    <script src="~/freshshop/js/custom.js"></script>
 </body>
 </html>
