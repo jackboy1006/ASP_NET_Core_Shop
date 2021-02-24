@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using ASP_NET_Core_Shop.Models.Repositories;
 
 namespace ASP_NET_Core_Shop
 {
@@ -41,6 +42,9 @@ namespace ASP_NET_Core_Shop
 			//連結資料庫
 			services.AddDbContext<ShopDBContext>(options =>
 			options.UseSqlServer(Configuration.GetConnectionString("DBConnectionString")));
+
+			services.AddScoped<IRepository, Repository>();
+			services.AddMvc();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

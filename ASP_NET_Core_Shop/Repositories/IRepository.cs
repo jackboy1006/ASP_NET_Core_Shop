@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ASP_NET_Core_Shop.Models;
 
-namespace ASP_NET_Core_Shop.Models.Repo
+namespace ASP_NET_Core_Shop.Models.Repositories
 {
-	interface IUserTableRepository
+	public interface IRepository
 	{
 		IQueryable<User> GetAllUsers();
 		User GetUserById(int id);

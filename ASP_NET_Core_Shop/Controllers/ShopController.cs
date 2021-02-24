@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ASP_NET_Core_Shop.Models.Repositories;
 using ASP_NET_Core_Shop.Models;
 //驗證
 using System.Security.Claims;
@@ -15,7 +16,11 @@ namespace ASP_NET_Core_Shop.Controllers
 {
 	public class ShopController : Controller
 	{
-		
+		private readonly IRepository _repository;
+		public ShopController(IRepository repository)
+        {
+			_repository = repository;
+        }
 
 
 		public IActionResult HomePage()
@@ -37,8 +42,7 @@ namespace ASP_NET_Core_Shop.Controllers
 				return View();
 			}
 
-			Models.Repo.UserTableRepository repo = new Models.Repo.UserTableRepository();
-			bool check = repo.UserLogin(_user);
+			bool check = _repository.UserLogin(_user);
 
 			if (!check)
 			{
@@ -57,8 +61,7 @@ namespace ASP_NET_Core_Shop.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult SignUp(User _user)
 		{
-			Models.Repo.UserTableRepository repo = new Models.Repo.UserTableRepository();
-			bool check = repo.AddUser(_user);
+			bool check = _repository.AddUser(_user);
 			if (!check)
 			{
 				TempData["Message"] = "帳號名重複，請重新填寫!";

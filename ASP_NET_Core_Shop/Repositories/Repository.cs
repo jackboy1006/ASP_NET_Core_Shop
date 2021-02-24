@@ -2,20 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ASP_NET_Core_Shop.Models;
 using MyDLL;
 
-namespace ASP_NET_Core_Shop.Models.Repo
+namespace ASP_NET_Core_Shop.Models.Repositories
 {
-	public class UserTableRepository : IUserTableRepository
+	public class Repository : IRepository
 	{
 		//連接資料庫
-		private readonly ShopDBContext _db;
-
-		public UserTableRepository()
-		{
-		}
-
-		public UserTableRepository(ShopDBContext context)
+		private ShopDBContext _db;
+		public Repository(ShopDBContext context)
 		{
 			_db = context;
 		}
@@ -25,8 +21,8 @@ namespace ASP_NET_Core_Shop.Models.Repo
 									in _db.Users
 									where u.UserName == user.UserName || u.Email == user.Email
 									select u;
-			if (data != null)
-				return false;
+			User _result = data.FirstOrDefault();
+			if (_result != null) return false;
 
 			string hashStr = Account.GetSHA1Hash(user.Password);
 			user.Password = hashStr;

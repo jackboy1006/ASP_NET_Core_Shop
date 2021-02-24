@@ -51,6 +51,7 @@
 
     <!-- Custom styles for this template -->
     <link href="~/css/signin.css" rel="stylesheet">
+    <link href="~/css/mystytle.css" rel="stylesheet" />
 </head>
 <body class="text-center">
 
@@ -58,6 +59,10 @@
         <form asp-action="SignUp">
             <img class="mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
             <h1 class="h3 mb-3 fw-normal">註冊會員</h1>
+            @if (TempData["Message"] != null)
+            {
+                <p class="Message">@TempData["Message"]</p>
+            }
             <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
                 <input asp-for="UserName" class="form-control" />
