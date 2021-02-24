@@ -72,6 +72,10 @@
     <Folder Include="wwwroot\freshshop\fonts\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyDLL\MyDLL.csproj" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ASP_NET_Core_Shop
 {
@@ -26,6 +27,16 @@ namespace ASP_NET_Core_Shop
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllersWithViews();
+
+			//會員驗證
+			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+					.AddCookie(options => {
+						//如果已登入但權限不足 會導向"/Shop/AccessDeny"此頁面
+						options.AccessDeniedPath = "/Shop/AccessDeny";
+						//如果未登入 會導向登入頁面
+						options.LoginPath = "/Shop/Login";
+						options.Cookie.HttpOnly = true;
+					});
 
 			//連結資料庫
 			services.AddDbContext<ShopDBContext>(options =>
@@ -47,7 +58,9 @@ namespace ASP_NET_Core_Shop
 
 			app.UseRouting();
 
-			app.UseAuthorization();
+			app.UseAuthentication();   //登入驗證
+
+			app.UseAuthorization();  //授權
 
 			app.UseEndpoints(endpoints =>
 			{
