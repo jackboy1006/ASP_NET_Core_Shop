@@ -51,7 +51,7 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 			throw new NotImplementedException();
 		}
 
-		public bool UserLogin(User user)
+		public User UserLogin(User user)
 		{
 			string sha256 = Account.GetSHA1Hash(user.Password);
 			IQueryable<User> data = from u
@@ -59,8 +59,8 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 									where u.UserName == user.UserName && u.Password == sha256
 									select u;
 			User _result = data.FirstOrDefault();
-			if (_result == null) return false;
-			return true;
+			if (_result == null) return null;
+			return _result;
 		}
 
 	}

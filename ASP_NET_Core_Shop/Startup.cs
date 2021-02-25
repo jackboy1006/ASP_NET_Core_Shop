@@ -36,6 +36,7 @@ namespace ASP_NET_Core_Shop
 						options.AccessDeniedPath = "/Shop/AccessDeny";
 						//如果未登入 會導向登入頁面
 						options.LoginPath = "/Shop/Login";
+						options.Cookie.Name = "MyShopCookie";
 						options.Cookie.HttpOnly = true;
 					});
 

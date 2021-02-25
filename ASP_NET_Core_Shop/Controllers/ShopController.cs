@@ -27,6 +27,11 @@ namespace ASP_NET_Core_Shop.Controllers
         {
 			return View();
         }
+		[Authorize(Roles = "Admin")]
+		public IActionResult AdminPage()
+		{
+			return View();
+		}
 
 		public IActionResult Login()
 		{
@@ -42,15 +47,37 @@ namespace ASP_NET_Core_Shop.Controllers
 				return View();
 			}
 
-			bool check = _repository.UserLogin(_user);
+			User userData = _repository.UserLogin(_user);
 
-			if (!check)
+			if (userData == null)
 			{
 				TempData["Message"] = "無此帳號，請重新註冊!";
 				return View();
 			}
+			string role;
+			if (userData.IsAdmin) role = "Admin";
+			else role = "Customer";
 
-			return Content("登陸成功，HI " + _user.UserName);
+			var claims = new List<Claim>
+			{
+				new Claim(ClaimTypes.Name,userData.UserName),
+				new Claim("User_ID",userData.Id.ToString()),
+				new Claim(ClaimTypes.Role, role)
+			};
+
+			ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+			AuthenticationProperties authProps = new AuthenticationProperties
+			{
+				AllowRefresh = true,
+				ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(20),
+				IsPersistent = true,
+			};
+			HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProps);
+
+			if (userData.IsAdmin) return RedirectToAction("AdminPage");
+			return RedirectToAction("HomePage");
+			//return Content("登入成功");
 		}
 
 		public IActionResult SignUp()
@@ -67,10 +94,33 @@ namespace ASP_NET_Core_Shop.Controllers
 				TempData["Message"] = "帳號名重複，請重新填寫!";
 				return View();
 			}
-			return Content(_user.UserName + "," + _user.Password + "," + _user.FullName + "," + _user.Email);
+			TempData["Message"] = "註冊成功! 請進行登入~";
+			//return Content(_user.UserName + "," + _user.Password + "," + _user.FullName + "," + _user.Email);
+			return RedirectToAction("Login");
 		}
+
+		public async Task<IActionResult> Logout()
+		{
+			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+			ViewData.Clear();
+			return Content("已登出");
+			//return RedirectToPage("/Account/SignedOut");   // 登出，跳去另一頁。
+		}
+
 		//權限不足
 		public IActionResult AccessDeny()
+		{
+			return View();
+		}
+
+
+		[Authorize]
+		public IActionResult TestLogin()
+		{
+			return View();
+		}
+		[Authorize(Roles = "Admin")]
+		public IActionResult TestAdminLogin()
 		{
 			return View();
 		}

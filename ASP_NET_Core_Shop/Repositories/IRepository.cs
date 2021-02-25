@@ -12,7 +12,7 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 		User GetUserByName(string name);
 		bool AddUser(User user);
 		bool DeleteUser(User user);
-		bool UserLogin(User user);
+		User UserLogin(User user);
 
 	}
 }
