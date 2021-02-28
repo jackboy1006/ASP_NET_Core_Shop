@@ -27,8 +27,8 @@ namespace ASP_NET_Core_Shop.Controllers
         {
 			return View();
         }
-		[Authorize(Roles = "Admin")]
-		public IActionResult AdminPage()
+		//[Authorize(Roles = "Admin")]
+		public IActionResult AdminHomePage()//等產品新增功能及頁面完成 要再處理此頁面的產品資料
 		{
 			return View();
 		}
@@ -113,8 +113,18 @@ namespace ASP_NET_Core_Shop.Controllers
 			return View();
 		}
 
+		public IActionResult AdminCreateProduct()
+        {
+			return View();
+        }
 
-		[Authorize]
+		public IActionResult AdminListProducts()
+        {
+			return View();
+        }
+
+        #region Test
+        [Authorize]
 		public IActionResult TestLogin()
 		{
 			return View();
@@ -125,5 +135,11 @@ namespace ASP_NET_Core_Shop.Controllers
 			return View();
 		}
 
-	}
+		public IActionResult TestCreate()
+        {
+			return View();
+        }
+        #endregion
+
+    }
 }

@@ -1,0 +1,204 @@
+﻿
+@{
+    ViewData["Title"] = "AdminCreateProduct";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">
+                    <span data-feather="home"></span>
+                    總覽
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">
+                    <span data-feather="file"></span>
+                    上架商品
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="shopping-cart"></span>
+                    商品管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="users"></span>
+                    使用者管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="bar-chart-2"></span>
+                    訂單管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="layers"></span>
+                    Integrations
+                </a>
+            </li>
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Saved reports</span>
+            <a class="link-secondary" href="#" aria-label="Add a new report">
+                <span data-feather="plus-circle"></span>
+            </a>
+        </h6>
+        <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="file-text"></span>
+                    Current month
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="file-text"></span>
+                    Last quarter
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="file-text"></span>
+                    Social engagement
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="file-text"></span>
+                    Year-end sale
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div class="col-md-7 col-lg-8">
+        <h4 class="mb-3">新增產品</h4>
+        <form class="needs-validation" novalidate id="create_product" enctype="multipart/form-data">
+            <div class="row g-3">
+
+                <div class="col-12">
+                    <label for="productname" class="form-label">產品名稱</label>
+                    <input type="text" class="form-control" id="productname" name="productname" placeholder="請輸入產品名稱" required>
+                    <div class="invalid-feedback">
+                        產品名稱為必須!請重輸入!
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <label for="producttype" class="form-label">產品類型</label>
+                    <select class="form-select" id="producttype" name="producttype" required>
+                        <option value="">選擇類型...</option>
+                        <option value="1">蛋糕</option>
+                        <option value="2">麵包</option>
+                        <option value="3">點心</option>
+                        <option value="4">飲料</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        請將產品歸類至一個類型!
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="productinfo" class="form-label">產品敘述</label>
+                    <input type="text" class="form-control" id="productinfo" name="productinfo" placeholder="請敘述此產品" required>
+                    <div class="invalid-feedback">
+                        產品敘述為必須!請輸入!
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="productstock" class="form-label">產品數量</label>
+                    <input type="number" class="form-control" id="productstock" name="productstock" placeholder="請輸入庫存數" required>
+                    <div class="invalid-feedback">
+                        請設定此產品的庫存數量!
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="productprice" class="form-label">產品價格</label>
+                    <input type="number" class="form-control" id="productprice" name="productprice" placeholder="請輸入價格" required>
+                    <div class="invalid-feedback">
+                        請設定此產品的價格!
+                    </div>
+                </div>
+
+                @*圖片上傳功能*@
+                <div class="col-12">
+                    <label for="productimage" class="form-label">產品圖片</label>
+                    <input type="file" id="productimage" name="productimage" accept="image/*" required />
+                    <div class="invalid-feedback">
+                        請選擇產品的圖片!
+                    </div>
+                </div>
+
+
+            </div>
+
+            <hr class="my-4">
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="same-address">
+                <label class="form-check-label" for="same-address">Shipping address is the same as my billing address</label>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="save-info">
+                <label class="form-check-label" for="save-info">Save this information for next time</label>
+            </div>
+
+            <hr class="my-4">
+
+            <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+        </form>
+    </div>
+</main>
+
+<script src="~/js/form-validation.js"></script>
+
+<script>
+    function addProduct(form) {
+        var input = form.querySelector('input[type="file"]')
+        console.log(input.files[0])
+        var formData = new FormData()
+        formData.append('productimage', input.files[0])
+        formData.set('name', $("#productname").val())
+        formData.set('type', $("#producttype").val())
+        formData.set('info', $("#productinfo").val())
+        formData.set('stock', $("#productstock").val())
+        formData.set('price', $("#productprice").val())
+        fetch('http://localhost:59576/api/WebAPI', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+            .then((data) => {
+                //console.log(data)
+                //console.log(data.name)
+                //console.log(data.typeId)
+                //console.log(data.info)
+                //console.log(data.stock)
+                //console.log(data.price)
+                //console.log(data.image)
+                console.log(data.message)
+                //console.log(data.path)
+                //console.log(data.text)
+                //pop(data.message,"AdminHomePage")
+            })
+        .catch(err => console.error('Unable to add item.', err))
+    }
+    function pop(message,page) {
+        alert(message);
+        window.location.href = page;
+    }
+</script>
+

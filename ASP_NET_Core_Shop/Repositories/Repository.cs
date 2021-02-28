@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ASP_NET_Core_Shop.Models;
+using Microsoft.AspNetCore.Http;
 using MyDLL;
 
 namespace ASP_NET_Core_Shop.Models.Repositories
@@ -63,5 +65,88 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 			return _result;
 		}
 
-	}
+		public async Task<string> AddProductAsync(IFormCollection formData, IFormFile productimage)
+        {
+			IQueryable<ProductType> dbProductType = from t
+													in _db.ProductTypes
+													where t.Id == Convert.ToInt32(formData["type"])
+													select t;
+			ProductType type = dbProductType.FirstOrDefault();
+			if (type == null) return "上架商品失敗! 產品類型不正確，請重新選擇!";
+
+
+			IQueryable<Product> dbData = from p
+									   in _db.Products
+									   where p.Name == formData["name"].ToString()
+										 select p;
+
+			Product _result = dbData.FirstOrDefault();
+			if (_result != null) return "上架商品失敗! 已上架相同商品!";
+
+			bool fileOK = false;
+			string path = "";
+			try
+			{
+				if (productimage.Length > 0)
+				{
+					string fileName = Path.GetFileName(productimage.FileName);
+					string savePath = Path.Combine("wwwroot", "Images", "Products");
+					string fileExtension = System.IO.Path.GetExtension(fileName);
+					string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+
+					for (int i = 0; i < allowedExtensions.Length; i++)
+					{
+						if (allowedExtensions[i] == fileExtension)
+							fileOK = true;
+					}
+					if (!fileOK)
+					{
+						return "上架商品失敗! 上傳的檔案，副檔名只能是 .jpg, .jpeg, .png, .gif 這四種。";
+					}
+					else
+					{
+						string OnlyFileName = Path.GetFileNameWithoutExtension(fileName);
+						string ExtFilename = Path.GetExtension(fileName);
+						fileName = OnlyFileName + DateTime.Now.ToString("yyyyMMddhhmmssfff") + ExtFilename;
+						string _end = Path.Combine(savePath, fileName);
+						using (var stream = System.IO.File.Create(_end))
+						{
+							await productimage.CopyToAsync(stream);
+						}
+						path = _end;
+
+						Product product = new Product
+						{
+							Name = formData["name"].ToString(),
+							TypeId = type.Id,
+							Info = formData["info"].ToString(),
+							Stock = Convert.ToInt32(formData["stock"]),
+							Price = Convert.ToInt32(formData["price"]),
+							Image = path,
+							Active = true
+						};
+
+						_db.Products.Add(product);
+                        await _db.SaveChangesAsync();
+
+						return "商品已成功上架";
+					}
+				}
+				else
+					return "上架商品失敗! 您尚未挑選檔案，無法上傳";
+			}
+			catch
+			{
+				return "上傳失敗!!!";
+			}
+        }
+
+        public List<Product> GetAllProducts()
+        {
+			IQueryable<Product> products = from p
+										   in _db.Products
+										   select p;
+			return products.ToList();
+		}
+    }
 }

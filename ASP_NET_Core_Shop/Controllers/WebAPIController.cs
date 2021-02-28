@@ -5,6 +5,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ASP_NET_Core_Shop.Models;
+using System.IO;
+using ASP_NET_Core_Shop.Models.Repositories;
 
 namespace ASP_NET_Core_Shop.Controllers
 {
@@ -12,6 +15,12 @@ namespace ASP_NET_Core_Shop.Controllers
 	[ApiController]
 	public class WebAPIController : ControllerBase
 	{
+		private readonly IRepository _repository;
+		public WebAPIController(IRepository repository)
+		{
+			_repository = repository;
+		}
+
 		[HttpGet]
 		[Route("GetUserName")]
 		public string GetUserName()
@@ -30,5 +39,31 @@ namespace ASP_NET_Core_Shop.Controllers
 			return null;
 			//return "測試";
 		}
-	}
+        [HttpPost]
+        public IActionResult AddProduct(IFormCollection data, IFormFile productimage)
+        {
+            Task<string> str = _repository.AddProductAsync(data, productimage);
+            var result = new
+            {
+                message = str.Result,
+            };
+            //Product product = new Product
+            //{
+            //    TypeId = Convert.ToInt32(data["type"]),
+            //    Name = data["name"],
+            //    Info = data["info"],
+            //    Stock = Convert.ToInt32(data["stock"]),
+            //    Price = Convert.ToInt32(data["price"]),
+            //    Image = productimage.FileName,
+            //    Active = true
+            //};
+            return Ok(result);
+        }
+		[HttpGet]
+		public IActionResult GetAllProducts()
+        {
+			var result = _repository.GetAllProducts();
+			return Ok(result);
+        }
+    }
 }
