@@ -19,5 +19,9 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 		Task<string> AddProductAsync(IFormCollection product, IFormFile image);
 		List<Product> GetAllProducts();
 
+		List<Product> GetAllDiscontinuedProducts();
+
+		Task<string> DiscontinueProduct(int id);
+		Task<string> DeleteProduct(int id);
 	}
 }

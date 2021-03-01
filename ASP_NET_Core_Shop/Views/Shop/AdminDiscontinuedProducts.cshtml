@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "AdminListProducts";
+    ViewData["Title"] = "AdminDiscontinuedProducts";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -20,13 +20,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" asp-action="AdminListProducts" asp-controller="Shop">
+                <a class="nav-link" asp-action="AdminListProducts" asp-controller="Shop">
                     <span data-feather="shopping-cart"></span>
                     商品管理
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" asp-action="AdminDiscontinuedProducts" asp-controller="Shop">
+                <a class="nav-link active" asp-action="AdminDiscontinuedProducts" asp-controller="Shop">
                     <span data-feather="layers"></span>
                     已下架商品
                 </a>
@@ -98,8 +98,8 @@
                 <!--這層開始重複物件-->
                 <!--<div class="col">
                     <div class="card shadow-sm">-->
-                        @*<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>*@
-                        <!--<img src="/Images/Products/伯爵海綿蛋糕20210228105056675.jpg" alt="" />
+                @*<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>*@
+                <!--<img src="/Images/Products/伯爵海綿蛋糕20210228105056675.jpg" alt="" />
                         <div class="card-body">
                             <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                             <div class="d-flex justify-content-between align-items-center">
@@ -120,11 +120,11 @@
 
 <script>
     $(document).ready(function () {
-        fetch('http://localhost:59576/api/WebAPI/GetAllProducts')
+        fetch('http://localhost:59576/api/WebAPI/GetAllDiscontinuedProducts')
             .then(response => response.json())
             .then(data => {
                 $.each(data, function (key, item) {
-                    console.log(item)
+                    //console.log(item)
                     var col = $("<div>", { class: "col", id: item.typeId, style: "display: none"});
                     var cardShadow = $("<div>", { class: "card shadow-sm" });
                     var img = $("<img>", { src: item.image });
@@ -135,7 +135,7 @@
                     var alignBtn = $("<div>", { class: "d-flex justify-content-between align-items-center" });
                     var btnGroup = $("<div>", { class: "btn-group" });
                     //var viewBtn = $("<button>", { type: "button", class: "btn btn-sm btn-outline-secondary", text: "檢視" });
-                    var deleteBtn = $("<button>", { type: "button", class: "btn btn-sm btn-outline-secondary", id: item.id, onClick: "reply_click(this.id)", text: "下架" });
+                    var deleteBtn = $("<button>", { type: "button", class: "btn btn-sm btn-outline-secondary", id: item.id, onClick: "reply_click(this.id)", text: "刪除" });
                     var small = $("<small>", { class: "text-muted", text: "價格: " + item.price + " " + "庫存: " + item.stock });
 
                     col.appendTo($("#display"));
@@ -174,8 +174,8 @@
     }
     function reply_click(id) {
         console.log(id);
-        fetch('http://localhost:59576/api/WebAPI/DiscontinueProduct/' + id, {
-            method: 'POST',
+        fetch('http://localhost:59576/api/WebAPI/Product/' + id, {
+            method: 'DELETE',
         })
             .then(response => response.json())
             .then((data) => {
@@ -186,10 +186,10 @@
                 //console.log(data.stock)
                 //console.log(data.price)
                 //console.log(data.image)
-                //console.log(data.message)
+                console.log(data.message)
                 //console.log(data.path)
                 //console.log(data.text)
-                pop(data.message,"AdminListProducts")
+                //pop(data.message, "AdminListProducts")
             })
             .catch(err => console.error('Unable to add item.', err))
     }
@@ -212,3 +212,4 @@
         });
     }
 </script>
+

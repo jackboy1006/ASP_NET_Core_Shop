@@ -38,17 +38,6 @@
 
     <!-- Custom styles for this template -->
     <link href="~/css/dashboard.css" rel="stylesheet">
-    <script>
-        function validateForm() {
-            var x = document.forms["myForm"]["fname"].value;
-            if (x == "") {
-                alert("Name must be filled out");
-                return false;
-            }
-        }
-    </script>
-
-
 </head>
 <body>
 
@@ -71,39 +60,39 @@
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">
+                            <a class="nav-link active" asp-action="AdminHomePage" asp-controller="Shop">
                                 <span data-feather="home"></span>
-                                Dashboard
+                                總覽
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">
+                            <a class="nav-link" asp-action="AdminCreateProduct" asp-controller="Shop">
                                 <span data-feather="file"></span>
-                                Orders
+                                上架商品
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" asp-action="AdminListProducts" asp-controller="Shop">
                                 <span data-feather="shopping-cart"></span>
-                                Products
+                                商品管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="AdminDiscontinuedProducts" asp-controller="Shop">
+                                <span data-feather="layers"></span>
+                                已下架商品
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="users"></span>
-                                Customers
+                                使用者管理
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <span data-feather="bar-chart-2"></span>
-                                Reports
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="layers"></span>
-                                Integrations
+                                訂單管理
                             </a>
                         </li>
                     </ul>

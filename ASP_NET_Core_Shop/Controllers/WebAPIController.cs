@@ -60,10 +60,43 @@ namespace ASP_NET_Core_Shop.Controllers
             return Ok(result);
         }
 		[HttpGet]
+		[Route("GetAllProducts")]
 		public IActionResult GetAllProducts()
         {
 			var result = _repository.GetAllProducts();
 			return Ok(result);
         }
-    }
+
+		[HttpGet]
+		[Route("GetAllDiscontinuedProducts")]
+		public IActionResult GetAllDiscontinuedProducts()
+		{
+			var result = _repository.GetAllDiscontinuedProducts();
+			return Ok(result);
+		}
+
+		[HttpPost]
+		[Route("DiscontinueProduct/{id}")]
+		public IActionResult PostDiscontinueProduct(int id)
+		{
+			var str = _repository.DiscontinueProduct(id);
+			var result = new
+			{
+				message = str.Result,
+			};
+			return Ok(result);
+		}
+
+		[HttpDelete]
+		[Route("Product/{id}")]
+		public IActionResult DeleteProduct(int id)
+		{
+			var str = _repository.DeleteProduct(id);
+			var result = new
+			{
+				message = str.Result,
+			};
+			return Ok(result);
+		}
+	}
 }

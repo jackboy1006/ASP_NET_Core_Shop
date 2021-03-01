@@ -8,21 +8,27 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">
+                <a class="nav-link" asp-action="AdminHomePage" asp-controller="Shop">
                     <span data-feather="home"></span>
                     總覽
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <a class="nav-link active" asp-action="AdminCreateProduct" asp-controller="Shop">
                     <span data-feather="file"></span>
                     上架商品
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" asp-action="AdminListProducts" asp-controller="Shop">
                     <span data-feather="shopping-cart"></span>
                     商品管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-action="AdminDiscontinuedProducts" asp-controller="Shop">
+                    <span data-feather="layers"></span>
+                    已下架商品
                 </a>
             </li>
             <li class="nav-item">
@@ -35,12 +41,6 @@
                 <a class="nav-link" href="#">
                     <span data-feather="bar-chart-2"></span>
                     訂單管理
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="layers"></span>
-                    Integrations
                 </a>
             </li>
         </ul>
@@ -189,10 +189,10 @@
                 //console.log(data.stock)
                 //console.log(data.price)
                 //console.log(data.image)
-                console.log(data.message)
+                //console.log(data.message)
                 //console.log(data.path)
                 //console.log(data.text)
-                //pop(data.message,"AdminHomePage")
+                pop(data.message,"AdminHomePage")
             })
         .catch(err => console.error('Unable to add item.', err))
     }

@@ -123,8 +123,13 @@ namespace ASP_NET_Core_Shop.Controllers
 			return View();
         }
 
-        #region Test
-        [Authorize]
+		public IActionResult AdminDiscontinuedProducts()
+        {
+			return View();
+        }
+
+		#region Test
+		[Authorize]
 		public IActionResult TestLogin()
 		{
 			return View();

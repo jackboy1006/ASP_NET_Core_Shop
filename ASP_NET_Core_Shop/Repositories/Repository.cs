@@ -145,8 +145,57 @@ namespace ASP_NET_Core_Shop.Models.Repositories
         {
 			IQueryable<Product> products = from p
 										   in _db.Products
+										   where p.Active == true
 										   select p;
+            foreach (var item in products)
+            {
+				item.Image = item.Image.Replace("wwwroot", "");
+            }
 			return products.ToList();
+		}
+
+        public List<Product> GetAllDiscontinuedProducts()
+        {
+			IQueryable<Product> products = from p
+										   in _db.Products
+										   where p.Active == false
+										   select p;
+			foreach (var item in products)
+			{
+				item.Image = item.Image.Replace("wwwroot", "");
+			}
+			return products.ToList();
+		}
+
+        public async Task<string> DiscontinueProduct(int id)
+        {
+			IQueryable<Product> product = from p
+										  in _db.Products
+										  where p.Id == id
+										  select p;
+			var _result = product.FirstOrDefault();
+			if (_result == null) return "此商品不存在!";
+
+			_result.Active = false;
+			_db.Products.Update(_result);
+			await _db.SaveChangesAsync();
+			return "商品已成功下架!";
+        }
+
+        public async Task<string> DeleteProduct(int id)
+        {
+			var product = await _db.Products.FindAsync(id);
+
+			if (product == null) return "此商品不存在!";
+
+			if (!File.Exists(product.Image)) return "圖片路徑有問題";
+
+			File.Delete(product.Image);
+
+            _db.Products.Remove(product);
+            await _db.SaveChangesAsync();
+
+            return "商品已成功刪除!";
 		}
     }
 }
