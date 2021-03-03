@@ -4,8 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800');
 @import url('https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,600,700');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&family=RocknRoll+One&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&display=swap');
 
 /*
 
@@ -36,7 +35,7 @@
 body {
     color: #666666;
     font-size: 15px;
-    font-family: 'Dosis', sans-serif;
+    font-family: 'Noto Sans TC', sans-serif;
     line-height: 1.80857;
 }
  a {
