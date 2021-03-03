@@ -25,8 +25,55 @@ namespace ASP_NET_Core_Shop.Controllers
 
 		public IActionResult HomePage()
         {
-			return View();
+			var _result = _repository.GetAllProducts();
+			return View(_result);
         }
+
+
+		[Authorize]
+		[HttpPost]
+		public IActionResult AddProductToBuyCart(int id)
+		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return Content("抱歉!找不到此用戶資訊，請重新登入!");
+			}
+
+			var _result = _repository.AddProductToCartAsync(Convert.ToInt32(userId), id);
+
+
+			return Ok(_result.Result);
+		}
+
+		public IActionResult BuyCart()
+		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			return View(_repository.GetUserBuyCart(Convert.ToInt32(userId)));
+		}
+
 		//[Authorize(Roles = "Admin")]
 		public IActionResult AdminHomePage()//等產品新增功能及頁面完成 要再處理此頁面的產品資料
 		{
@@ -128,6 +175,7 @@ namespace ASP_NET_Core_Shop.Controllers
 			return View();
         }
 
+
 		#region Test
 		[Authorize]
 		public IActionResult TestLogin()
@@ -144,7 +192,30 @@ namespace ASP_NET_Core_Shop.Controllers
         {
 			return View();
         }
-        #endregion
 
-    }
+		public IActionResult TestList()
+		{
+			var _result = _repository.GetAllProducts();
+			return View(_result);
+		}
+
+		public IActionResult TestListBuyCart()
+		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			return View(_repository.GetUserBuyCart(Convert.ToInt32(userId)));
+		}
+		#endregion
+
+	}
 }

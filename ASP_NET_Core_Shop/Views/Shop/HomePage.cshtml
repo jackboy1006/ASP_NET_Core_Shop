@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<ASP_NET_Core_Shop.Models.Product>
+
 @{
     Layout = null;
 }
@@ -14,17 +15,26 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script>
         $(document).ready(function () {
             console.log("ready");
-            //fetch('api/WebAPI/GetUserName')
-            //    .then(data => console.log(data))
-            //    .catch(error => console.error('Unable to get items.', error));
             $.get('/api/WebAPI/GetUserName', function (data) {
                 console.log(data)
                 $(".username").text(data);
             });
         });
+        function AddToBuyCart(productId) {
+            $.post('AddProductToBuyCart/' + productId)
+                .done(function (message) {
+                    alert(message);
+                })
+                .fail(function (jqXHR, textStatus, err) {
+                    if (jqXHR.status == 401) {
+                        alert("請先登入會員!");
+                    }
+                })
+        }
     </script>
     <!-- Bootstrap core CSS -->
     <link href="~/bootstrap-5.0.0-beta2-dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
@@ -52,7 +62,7 @@
     <!-- Custom styles for this template -->
     <link href="~/css/carousel.css" rel="stylesheet">
     <!-- Site CSS -->
-    <link href="~/freshshop/css/style.css" rel="stylesheet">
+    <link href="/freshshop/css/style.css" rel="stylesheet">
     <!-- Responsive CSS -->
     @*<link href="~/freshshop/css/responsive.css" rel="stylesheet">*@
     <!-- Custom CSS -->
@@ -220,9 +230,9 @@
                         <div class="special-menu text-center">
                             <div class="button-group filter-button-group">
                                 <!--這裡是依照data-filter切換下面產品 後續要改成動態讀取-->
-                                <button class="active" data-filter="*">All</button>
-                                <button data-filter=".top-featured">Top featured</button>
-                                <button data-filter=".best-seller">Best seller</button>
+                                <button class="active" data-filter="*">全部</button>
+                                <button data-filter=".hot-new">熱門新品</button>
+                                <button data-filter=".best-seller">人氣商品</button>
                             </div>
                         </div>
                     </div>
@@ -233,41 +243,65 @@
                         <div class="products-single fix">
                             <div class="box-img-hover">
                                 <div class="type-lb">
-                                    <p class="sale">Sale</p>
+                                    <p class="sale">人氣商品</p>
                                 </div>
                                 <img src="/Images/Products/伯爵海綿蛋糕20210228105056675.jpg" class="img-fluid" alt="Image">
                             </div>
                             <div class="why-text">
                                 <h4>Lorem ipsum dolor sit amet</h4>
-                                <h5>$700</h5>
-                                <button class="btn btn-outline-success" type="submit" style="width:200px;height:38px;">加入購物車</button>
+                                <h5>NT$700</h5>
                             </div>
+                            <button class="btn btn-outline-success" type="submit" style="width:150px;height:38px;">加入購物車</button>
                         </div>
                     </div>
-
-
-                    @*<div class="col-lg-3 col-md-6 special-grid best-seller">
+                    <div class="col-lg-3 col-md-6 special-grid hot-new">
                         <div class="products-single fix">
                             <div class="box-img-hover">
                                 <div class="type-lb">
-                                    <p class="sale">Sale</p>
+                                    <p class="new">熱門新品</p>
                                 </div>
-                                <img src="images/img-pro-04.jpg" class="img-fluid" alt="Image">
-                                <div class="mask-icon">
-                                    <ul>
-                                        <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
-                                        <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
-                                        <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
-                                    </ul>
-                                    <a class="cart" href="#">Add to Cart</a>
-                                </div>
+                                <img src="/Images/Products/伯爵海綿蛋糕20210228105056675.jpg" class="img-fluid" alt="Image">
                             </div>
                             <div class="why-text">
                                 <h4>Lorem ipsum dolor sit amet</h4>
-                                <h5> $15.79</h5>
+                                <h5>NT$700</h5>
+                            </div>
+                            <button class="btn btn-outline-success" type="submit" style="width:150px;height:38px;">加入購物車</button>
+                        </div>
+                    </div>
+                    @foreach (var item in Model)
+                    {
+                        var title = "";
+                        var category = "";
+                        var pClass = "";
+                        if (item.Stock >= 10)
+                        {
+                            category = "hot-new";
+                            title = "熱門新品";
+                            pClass = "new";
+                        }
+                        else if (item.Stock <= 5)
+                        {
+                            category = "best-seller";
+                            title = "人氣商品";
+                            pClass = "sale";
+                        }
+                        <div class="col-lg-3 col-md-6 special-grid @category">
+                            <div class="products-single fix">
+                                <div class="box-img-hover">
+                                    <div class="type-lb">
+                                        <p class="@pClass">@title</p>
+                                    </div>
+                                    <img src="@item.Image" class="img-fluid" alt="Image">
+                                </div>
+                                <div class="why-text">
+                                    <h4>@item.Name</h4>
+                                    <h5>NT$@item.Price</h5>
+                                </div>
+                                <button class="btn btn-outline-success" id="@item.Id" type="submit" onclick="AddToBuyCart(this.id)" style="width:150px;height:38px;">加入購物車</button>
                             </div>
                         </div>
-                    </div>*@
+                    }
                 </div>
             </div>
         </div>
@@ -276,20 +310,20 @@
 
     <script src="/bootstrap-5.0.0-beta2-dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <!-- ALL JS FILES -->
-    <script src="~/freshshop/js/jquery-3.2.1.min.js"></script>
-    <script src="~/freshshop/js/popper.min.js"></script>
-    <script src="~/freshshop/js/bootstrap.min.js"></script>
+    @*<script src="~/freshshop/js/jquery-3.2.1.min.js"></script>*@
+    @*<script src="~/freshshop/js/popper.min.js"></script>*@
+    @*<script src="~/freshshop/js/bootstrap.min.js"></script>*@
     <!-- ALL PLUGINS -->
     <script src="~/freshshop/js/jquery.superslides.min.js"></script>
-    <script src="~/freshshop/js/bootstrap-select.js"></script>
-    <script src="~/freshshop/js/inewsticker.js"></script>
-    <script src="~/freshshop/js/bootsnav.js."></script>
+    @*<script src="~/freshshop/js/bootstrap-select.js"></script>*@
+    @*<script src="~/freshshop/js/inewsticker.js"></script>*@
+    @*<script src="~/freshshop/js/bootsnav.js."></script>*@
     <script src="~/freshshop/js/images-loded.min.js"></script>
     <script src="~/freshshop/js/isotope.min.js"></script>
-    <script src="~/freshshop/js/owl.carousel.min.js"></script>
-    <script src="~/freshshop/js/baguetteBox.min.js"></script>
-    <script src="~/freshshop/js/form-validator.min.js"></script>
-    <script src="~/freshshop/js/contact-form-script.js"></script>
+    @*<script src="~/freshshop/js/owl.carousel.min.js"></script>*@
+    @*<script src="~/freshshop/js/baguetteBox.min.js"></script>*@
+    @*<script src="~/freshshop/js/form-validator.min.js"></script>*@
+    @*<script src="~/freshshop/js/contact-form-script.js"></script>*@
     <script src="~/freshshop/js/custom.js"></script>
 </body>
 </html>

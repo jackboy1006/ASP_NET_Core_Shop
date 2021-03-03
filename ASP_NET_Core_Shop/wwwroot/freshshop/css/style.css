@@ -4,6 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800');
 @import url('https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,600,700');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&family=RocknRoll+One&display=swap');
 
 
 /*
@@ -11,7 +12,7 @@
     font-family: 'Poppins', sans-serif;
 
     font-family: 'Dosis', sans-serif;
-
+    RocknRoll One
 */
 
 /*------------------------------------------------------------------
@@ -32,11 +33,11 @@
 /*------------------------------------------------------------------
     SKELETON
 -------------------------------------------------------------------*/
- body {
-     color: #666666;
-     font-size: 15px;
-     font-family: 'Dosis', sans-serif;
-     line-height: 1.80857;
+body {
+    color: #666666;
+    font-size: 15px;
+    font-family: 'Dosis', sans-serif;
+    line-height: 1.80857;
 }
  a {
      color: #1f1f1f;
@@ -900,7 +901,7 @@
      display: inline-block;
 }
  .filter-button-group button{
-     background: #198754;
+     background: #b0b435;
      color: #ffffff;
      border: none;
      cursor: pointer;
@@ -1909,9 +1910,9 @@
      justify-content: space-between;
      padding: 5px 0;
 }
- .nice-select.wide{
+/* .nice-select.wide{
      width: 75%;
-}
+}*/
  .product-item-filter .toolbar-sorter-right span{
      line-height: 42px;
      padding-right: 15px;

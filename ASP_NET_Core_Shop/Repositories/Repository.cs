@@ -167,7 +167,7 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 			return products.ToList();
 		}
 
-        public async Task<string> DiscontinueProduct(int id)
+        public async Task<string> DiscontinueProductAsync(int id)
         {
 			IQueryable<Product> product = from p
 										  in _db.Products
@@ -182,7 +182,7 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 			return "商品已成功下架!";
         }
 
-        public async Task<string> DeleteProduct(int id)
+        public async Task<string> DeleteProductAsync(int id)
         {
 			var product = await _db.Products.FindAsync(id);
 
@@ -197,5 +197,61 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 
             return "商品已成功刪除!";
 		}
-    }
+
+		public async Task<string> AddProductToCartAsync(int userId, int id)
+		{
+			IQueryable<BuyCart> checkDuplicate = from b
+												 in _db.BuyCarts
+												 where b.UserId == userId && b.ProductId == id
+												 select b;
+			BuyCart existedProduct = checkDuplicate.FirstOrDefault();
+			if (existedProduct != null)
+			{
+				existedProduct.Quantity += 1;
+				_db.BuyCarts.Update(existedProduct);
+				await _db.SaveChangesAsync();
+				return "購物車內已存在此商品，已為您增加數量!";
+			}
+			IQueryable<Product> getProduct = from p
+										  in _db.Products
+										  where p.Id == id
+										  select p;
+			Product product = getProduct.FirstOrDefault();
+			if (product == null) return "此商品不存在!";
+
+			BuyCart cart = new BuyCart
+			{
+				ProductId = id,
+				Quantity = 1,
+				UserId = userId,
+				ProductName = product.Name,
+				Product = product
+			};
+			_db.BuyCarts.Add(cart);
+			await _db.SaveChangesAsync();
+
+			return "商品已成功加入購物車!";
+		}
+
+		public List<BuyCart> GetUserBuyCart(int id)
+		{
+			IQueryable<BuyCart> getBuyCart = from b
+											 in _db.BuyCarts
+											 where b.UserId == id
+											 select new BuyCart 
+											 { 
+												UserId = b.UserId,
+												ProductId = b.ProductId,
+												Quantity = b.Quantity,
+												ProductName = b.ProductName,
+												Product = b.Product
+											 };
+			List<BuyCart> buyCart = getBuyCart.ToList();
+			foreach (var item in buyCart)
+			{
+				item.Product.Image = item.Product.Image.Replace("wwwroot", "");
+			}
+			return buyCart;
+		}
+	}
 }

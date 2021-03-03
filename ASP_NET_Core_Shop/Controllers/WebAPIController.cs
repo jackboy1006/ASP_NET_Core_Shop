@@ -79,7 +79,7 @@ namespace ASP_NET_Core_Shop.Controllers
 		[Route("DiscontinueProduct/{id}")]
 		public IActionResult PostDiscontinueProduct(int id)
 		{
-			var str = _repository.DiscontinueProduct(id);
+			var str = _repository.DiscontinueProductAsync(id);
 			var result = new
 			{
 				message = str.Result,
@@ -91,7 +91,7 @@ namespace ASP_NET_Core_Shop.Controllers
 		[Route("Product/{id}")]
 		public IActionResult DeleteProduct(int id)
 		{
-			var str = _repository.DeleteProduct(id);
+			var str = _repository.DeleteProductAsync(id);
 			var result = new
 			{
 				message = str.Result,

@@ -21,7 +21,10 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 
 		List<Product> GetAllDiscontinuedProducts();
 
-		Task<string> DiscontinueProduct(int id);
-		Task<string> DeleteProduct(int id);
+		Task<string> DiscontinueProductAsync(int id);
+		Task<string> DeleteProductAsync(int id);
+
+		Task<string> AddProductToCartAsync(int userId,int productId);
+		List<BuyCart> GetUserBuyCart(int id);
 	}
 }
