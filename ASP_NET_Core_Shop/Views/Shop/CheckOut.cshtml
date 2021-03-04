@@ -13,47 +13,46 @@
                     <div class="title-left">
                         <h3>填寫訂購資料</h3>
                     </div>
-                    <form class="needs-validation" novalidate>
-                        
+                    <form class="needs-validation" novalidate id="orderForm" asp-action="CreateOrder">
+
                         <div class="mb-3">
                             <label for="username">收件人姓名 *</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="username" placeholder="" required>
-                                <div class="invalid-feedback" style="width: 100%;"> Your username is required. </div>
+                                <div class="invalid-feedback" style="width: 100%;">請輸入收件人!</div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="email">收件人Email *</label>
-                            <input type="email" class="form-control" id="email" placeholder="">
-                            <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
+                            <input type="email" class="form-control" id="email" placeholder="" required>
+                            <div class="invalid-feedback">請輸入Email!</div>
                         </div>
                         <div class="mb-3">
                             <label for="address">收件地址 *</label>
                             <input type="text" class="form-control" id="address" placeholder="" required>
-                            <div class="invalid-feedback"> Please enter your shipping address. </div>
+                            <div class="invalid-feedback">請輸入收件地址!</div>
                         </div>
                         <div class="row">
                             <div class="col-md-5 mb-3">
                                 <label for="city">縣市 *</label>
-                                <select class="wide w-100" id="city" onclick="switchCity(this.value)">
-                                    <option value="Choose..." data-display="Select">請選擇...</option>
+                                <select class="wide w-100" id="city" onclick="switchCity(this.value)" required>
+                                    <option value="" data-display="Select">請選擇...</option>
                                     <option value="Taipei">台北市</option>
                                     <option value="NewTaipei">新北市</option>
                                 </select>
-                                <div class="invalid-feedback"> Please select a valid country. </div>
+                                <div class="invalid-feedback">請選擇縣市!</div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="area">地區 *</label>
-                                <select class="wide w-100" id="area">
-                                    <option data-display="Select">請選擇...</option>
-                                    <option>California</option>
+                                <select class="wide w-100" id="area" required>
+                                    <option value="" data-display="Select">請選擇...</option>
                                 </select>
-                                <div class="invalid-feedback"> Please provide a valid state. </div>
+                                <div class="invalid-feedback">請選擇地區!</div>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="zip">郵遞區號 *</label>
                                 <input type="text" class="form-control" id="zip" placeholder="" required>
-                                <div class="invalid-feedback"> Zip code required. </div>
+                                <div class="invalid-feedback">請輸入郵遞區號!</div>
                             </div>
                         </div>
                         <hr class="mb-4">
@@ -74,26 +73,26 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="cc-name">Name on card</label>
-                                <input type="text" class="form-control" id="cc-name" placeholder="" required> <small class="text-muted">Full name as displayed on card</small>
-                                <div class="invalid-feedback"> Name on card is required </div>
+                                <label for="cc-name">持卡人姓名</label>
+                                <input type="text" class="form-control" id="cc-name" placeholder="" required> <small class="text-muted"></small>
+                                <div class="invalid-feedback">請輸入持卡人姓名!</div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="cc-number">Credit card number</label>
+                                <label for="cc-number">卡片號碼</label>
                                 <input type="text" class="form-control" id="cc-number" placeholder="" required>
-                                <div class="invalid-feedback"> Credit card number is required </div>
+                                <div class="invalid-feedback">請輸入卡片號碼!</div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3 mb-3">
-                                <label for="cc-expiration">Expiration</label>
+                                <label for="cc-expiration">到期日</label>
                                 <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
-                                <div class="invalid-feedback"> Expiration date required </div>
+                                <div class="invalid-feedback">請輸入到期日!</div>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="cc-expiration">CVV</label>
                                 <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
-                                <div class="invalid-feedback"> Security code required </div>
+                                <div class="invalid-feedback">請輸入安全碼!</div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="payment-icon">
@@ -165,7 +164,7 @@
                             </div>
                             <div class="d-flex">
                                 <h4>折扣</h4>
-                                <div class="ml-auto font-weight-bold"> 0 </div>
+                                <div class="ml-auto font-weight-bold">- @ViewData["usecoupon"] </div>
                             </div>
                             <hr>
                             <div class="d-flex gr-total">
@@ -175,7 +174,9 @@
                             <hr>
                         </div>
                     </div>
-                    <div class="col-12 d-flex shopping-box"> <a href="checkout.html" class="ml-auto btn hvr-hover">送出訂單</a> </div>
+                    <div class="col-12 d-flex shopping-box">
+                        <button class="ml-auto btn hvr-hover" id="sendOrder" type="submit" onclick="sendOrder();" style="width:150px;height:38px;">送出訂單</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -209,6 +210,31 @@
             $('#area').append("<option>請選擇...</option>");
         }
     }
+    function sendOrder() {
+        //document.getElementById('orderForm').submit();
+        var form = document.getElementById('orderForm');
+        if (!form.checkValidity()) {
+            form.classList.add("was-validated");
+        }
+        else {
+            fetch('CreateOrder', {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    buyerName: $("#username").val(),
+                    buyerEmail: $("#email").val()
+                })
+            })
+                .then(response => response.json())
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch(err => console.error('Unable to add order.', err))
+        }
+    }
 
     $(document).ready(function () {
         console.log(@ViewData["usecoupon"]);
@@ -231,3 +257,4 @@
         document.getElementById("finalTotal").textContent = "NT$ @finalTotal";
     });
 </script>
+

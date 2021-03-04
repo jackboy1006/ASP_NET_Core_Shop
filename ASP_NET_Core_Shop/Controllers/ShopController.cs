@@ -161,7 +161,7 @@ namespace ASP_NET_Core_Shop.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult UpdateBuyCart([FromBody] BuyCart cart)
+		public IActionResult UpdateBuyCart([FromBody]BuyCart cart)
 		{
 			string userId = "";
 			ClaimsPrincipal principal = HttpContext.User;
@@ -226,12 +226,17 @@ namespace ASP_NET_Core_Shop.Controllers
 				return StatusCode(401);
 			}
 
-			if (discount == "usecoupon") ViewData["usecoupon"] = 200;
+			if (discount == "usecoupon") ViewData["usecoupon"] = 50;
 
 			var result = _repository.GetUserBuyCart(Convert.ToInt32(userId));
 
 			return View(result);
 		}
+		[HttpPost]
+		public IActionResult CreateOrder([FromBody]Order order)
+        {
+			return Ok(order.BuyerName);
+        }
 
 		#endregion
 
