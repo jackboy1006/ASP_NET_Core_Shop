@@ -1,0 +1,233 @@
+﻿@model IEnumerable<ASP_NET_Core_Shop.Models.BuyCart>
+
+@{
+    ViewData["Title"] = "CheckOut";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<div class="cart-box-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-lg-6 mb-3">
+                <div class="checkout-address">
+                    <div class="title-left">
+                        <h3>填寫訂購資料</h3>
+                    </div>
+                    <form class="needs-validation" novalidate>
+                        
+                        <div class="mb-3">
+                            <label for="username">收件人姓名 *</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="username" placeholder="" required>
+                                <div class="invalid-feedback" style="width: 100%;"> Your username is required. </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email">收件人Email *</label>
+                            <input type="email" class="form-control" id="email" placeholder="">
+                            <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address">收件地址 *</label>
+                            <input type="text" class="form-control" id="address" placeholder="" required>
+                            <div class="invalid-feedback"> Please enter your shipping address. </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <label for="city">縣市 *</label>
+                                <select class="wide w-100" id="city" onclick="switchCity(this.value)">
+                                    <option value="Choose..." data-display="Select">請選擇...</option>
+                                    <option value="Taipei">台北市</option>
+                                    <option value="NewTaipei">新北市</option>
+                                </select>
+                                <div class="invalid-feedback"> Please select a valid country. </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="area">地區 *</label>
+                                <select class="wide w-100" id="area">
+                                    <option data-display="Select">請選擇...</option>
+                                    <option>California</option>
+                                </select>
+                                <div class="invalid-feedback"> Please provide a valid state. </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="zip">郵遞區號 *</label>
+                                <input type="text" class="form-control" id="zip" placeholder="" required>
+                                <div class="invalid-feedback"> Zip code required. </div>
+                            </div>
+                        </div>
+                        <hr class="mb-4">
+                        <div class="title"> <span>付款方式</span> </div>
+                        <div class="d-block my-3">
+                            <div class="custom-control custom-radio">
+                                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+                                <label class="custom-control-label" for="credit">Credit card</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+                                <label class="custom-control-label" for="debit">Debit card</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+                                <label class="custom-control-label" for="paypal">Paypal</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-name">Name on card</label>
+                                <input type="text" class="form-control" id="cc-name" placeholder="" required> <small class="text-muted">Full name as displayed on card</small>
+                                <div class="invalid-feedback"> Name on card is required </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-number">Credit card number</label>
+                                <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                                <div class="invalid-feedback"> Credit card number is required </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="cc-expiration">Expiration</label>
+                                <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                                <div class="invalid-feedback"> Expiration date required </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="cc-expiration">CVV</label>
+                                <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                                <div class="invalid-feedback"> Security code required </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="payment-icon">
+                                    <ul>
+                                        <li><img class="img-fluid" src="/freshshop/images/payment-icon/1.png" alt=""></li>
+                                        <li><img class="img-fluid" src="/freshshop/images/payment-icon/2.png" alt=""></li>
+                                        <li><img class="img-fluid" src="/freshshop/images/payment-icon/3.png" alt=""></li>
+                                        <li><img class="img-fluid" src="/freshshop/images/payment-icon/5.png" alt=""></li>
+                                        <li><img class="img-fluid" src="/freshshop/images/payment-icon/7.png" alt=""></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="mb-1">
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-3">
+                <div class="row">
+                    <div class="col-md-12 col-lg-12">
+                        <div class="shipping-method-box">
+                            <div class="title-left">
+                                <h3>寄送方式</h3>
+                            </div>
+                            <div class="mb-4">
+                                <div class="custom-control custom-radio">
+                                    <input id="shippingOption1" name="shipping-option" class="custom-control-input" checked="checked" type="radio">
+                                    <label class="custom-control-label" for="shippingOption1">快速到貨</label> <span class="float-right font-weight-bold">NT$ 150</span>
+                                </div>
+                                <div class="ml-4 mb-2 small">(3 - 7小時內送達)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12">
+                        <div class="odr-box">
+                            <div class="title-left">
+                                <h3>商品清單</h3>
+                            </div>
+                            <div class="rounded p-2 bg-light">
+                                @foreach (var item in Model)
+                                {
+                                    <div class="media mb-2 border-bottom">
+                                        <div class="media-body">
+                                            <a href="detail.html">@item.ProductName</a>
+                                            <div class="small text-muted">售價: NT$ @item.Product.Price <span class="mx-2">|</span> 數量: @item.Quantity <span class="mx-2">|</span> 總價: NT$ @(item.Product.Price * item.Quantity)</div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12">
+                        <div class="order-box">
+                            <div class="title-left">
+                                <h3>訂單金額</h3>
+                            </div>
+                            <div class="d-flex">
+                                <div class="font-weight-bold">項目</div>
+                                <div class="ml-auto font-weight-bold">Total</div>
+                            </div>
+                            <hr class="my-1">
+                            <div class="d-flex">
+                                <h4>小計</h4>
+                                <div class="ml-auto font-weight-bold" id="total"> 440 </div>
+                            </div>
+                            <div class="d-flex">
+                                <h4>運費</h4>
+                                <div class="ml-auto font-weight-bold"> 150 </div>
+                            </div>
+                            <div class="d-flex">
+                                <h4>折扣</h4>
+                                <div class="ml-auto font-weight-bold"> 0 </div>
+                            </div>
+                            <hr>
+                            <div class="d-flex gr-total">
+                                <h5>總金額</h5>
+                                <div class="ml-auto h5" id="finalTotal"> NT$ 388 </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="col-12 d-flex shopping-box"> <a href="checkout.html" class="ml-auto btn hvr-hover">送出訂單</a> </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var area = document.getElementById("area");
+    var taipeiOption = ["中正區", "大同區", "中山區", "松山區", "大安區"
+        , "萬華區", "信義區", "士林區", "北投區", "內湖區", "南港區", "文山區"];
+    var newTaipeiOption = ["板橋區", "中和區", "新莊區", "土城區", "汐止區", "鶯歌區", "淡水區", "五股區", "林口區", "深坑區"
+        , "坪林區", "石門區", "萬里區", "雙溪區", "烏來區", "三重區", "永和區", "新店區", "蘆洲區", "樹林區"
+        , "三峽區", "瑞芳區", "泰山區", "八里區", "石碇區", "三芝區", "金山區", "平溪區", "貢寮區"];
+
+    function switchCity(value) {
+        if (value == "Taipei") {
+            $('#area').empty();
+            for (var i = 0; i < taipeiOption.length; i++) {
+                $('#area').append(`<option>${taipeiOption[i]}</option>`);
+            }
+        }
+        else if (value == "NewTaipei") {
+            $('#area').empty();
+            for (var i = 0; i < newTaipeiOption.length; i++) {
+                $('#area').append(`<option>${newTaipeiOption[i]}</option>`);
+            }
+        }
+        else {
+            $('#area').empty();
+            $('#area').append("<option>請選擇...</option>");
+        }
+    }
+
+    $(document).ready(function () {
+        console.log(@ViewData["usecoupon"]);
+        @{ 
+            var total = 0;
+            var finalTotal = 0;
+            var discount = 0;
+            if (ViewData["usecoupon"] != null)
+            {
+                discount = int.Parse(ViewData["usecoupon"].ToString());
+            }
+
+            foreach (var item in Model)
+            {
+                total += (item.Product.Price * item.Quantity);
+            }
+            finalTotal += (150 + total - discount);
+        }
+        document.getElementById("total").textContent = @total;
+        document.getElementById("finalTotal").textContent = "NT$ @finalTotal";
+    });
+</script>

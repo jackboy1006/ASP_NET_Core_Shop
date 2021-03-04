@@ -251,7 +251,38 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 			{
 				item.Product.Image = item.Product.Image.Replace("wwwroot", "");
 			}
+
 			return buyCart;
+		}
+
+		public async Task<string> UpdateBuyCartAsync(int userId, BuyCart cart)
+		{
+			IQueryable<BuyCart> getBuyCart = from b
+											 in _db.BuyCarts
+											 where b.UserId == userId && b.ProductId == cart.ProductId
+											 select b;
+			BuyCart buyCart = getBuyCart.FirstOrDefault();
+			if (buyCart == null) return "此商品已不存在購物車，請重新選購!";
+
+			buyCart.Quantity = cart.Quantity;
+			_db.Update(buyCart);
+			await _db.SaveChangesAsync();
+
+			return "購物車已更新";
+		}
+
+		public async Task<string> DeleteBuyCartAsync(int userId, int productId)
+		{
+			IQueryable<BuyCart> getBuyCart = from b
+											 in _db.BuyCarts
+											 where b.UserId == userId && b.ProductId == productId
+											 select b;
+			BuyCart buyCart = getBuyCart.FirstOrDefault();
+			if(buyCart == null) return "此商品已不存在購物車!";
+
+			_db.BuyCarts.Remove(buyCart);
+			await _db.SaveChangesAsync();
+			return "此商品已成功刪除!";
 		}
 	}
 }

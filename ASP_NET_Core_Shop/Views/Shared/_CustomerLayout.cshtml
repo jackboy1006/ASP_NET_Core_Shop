@@ -18,21 +18,13 @@
         $(document).ready(function () {
             console.log("ready");
             $.get('/api/WebAPI/GetUserName', function (data) {
-                console.log(data)
-                $(".username").text(data);
+                
+                if (data != null) {
+                    $(".username").text(data + " 您好!");
+                    $('#Logout').text("登出");
+                }
             });
         });
-        function AddToBuyCart(productId) {
-            $.post('AddProductToBuyCart/' + productId)
-                .done(function (message) {
-                    alert(message);
-                })
-                .fail(function (jqXHR, textStatus, err) {
-                    if (jqXHR.status == 401) {
-                        alert("請先登入會員!");
-                    }
-                })
-        }
     </script>
     <!-- Bootstrap core CSS -->
     <link href="~/bootstrap-5.0.0-beta2-dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
@@ -83,7 +75,7 @@
                 <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">首頁</a>
+                            <a class="nav-link active" aria-current="page" asp-controller="Shop" asp-action="HomePage">首頁</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">會員</a>
@@ -93,7 +85,13 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">會員登入</a>
+                            <a class="nav-link" href="">商品</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Shop" asp-action="BuyCart">購物車</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="Logout" asp-controller="Shop" asp-action="Logout"></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active username" href=""></a>

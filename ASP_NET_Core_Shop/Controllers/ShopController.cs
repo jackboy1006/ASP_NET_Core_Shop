@@ -22,68 +22,12 @@ namespace ASP_NET_Core_Shop.Controllers
 			_repository = repository;
         }
 
-
-		public IActionResult HomePage()
-        {
-			var _result = _repository.GetAllProducts();
-			return View(_result);
-        }
-
-
-		[Authorize]
-		[HttpPost]
-		public IActionResult AddProductToBuyCart(int id)
-		{
-			string userId = "";
-			ClaimsPrincipal principal = HttpContext.User;
-			if (principal != null)
-			{
-				foreach (Claim claim in principal.Claims)
-				{
-					if (claim.Type == "User_ID")
-					{
-						userId = claim.Value;
-					}
-				}
-			}
-			else
-			{
-				return Content("抱歉!找不到此用戶資訊，請重新登入!");
-			}
-
-			var _result = _repository.AddProductToCartAsync(Convert.ToInt32(userId), id);
-
-
-			return Ok(_result.Result);
-		}
-
-		public IActionResult BuyCart()
-		{
-			string userId = "";
-			ClaimsPrincipal principal = HttpContext.User;
-			if (principal != null)
-			{
-				foreach (Claim claim in principal.Claims)
-				{
-					if (claim.Type == "User_ID")
-					{
-						userId = claim.Value;
-					}
-				}
-			}
-			return View(_repository.GetUserBuyCart(Convert.ToInt32(userId)));
-		}
-
-		//[Authorize(Roles = "Admin")]
-		public IActionResult AdminHomePage()//等產品新增功能及頁面完成 要再處理此頁面的產品資料
-		{
-			return View();
-		}
-
+		#region Account
 		public IActionResult Login()
 		{
 			return View();
 		}
+
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public IActionResult Login(User _user)
@@ -122,15 +66,15 @@ namespace ASP_NET_Core_Shop.Controllers
 			};
 			HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProps);
 
-			if (userData.IsAdmin) return RedirectToAction("AdminPage");
+			if (userData.IsAdmin) return RedirectToAction("AdminHomePage");
 			return RedirectToAction("HomePage");
 			//return Content("登入成功");
 		}
-
 		public IActionResult SignUp()
 		{
 			return View();
 		}
+
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public IActionResult SignUp(User _user)
@@ -154,27 +98,178 @@ namespace ASP_NET_Core_Shop.Controllers
 			//return RedirectToPage("/Account/SignedOut");   // 登出，跳去另一頁。
 		}
 
+		#endregion
+
+		#region Customer
+
+		public IActionResult HomePage()
+		{
+			var _result = _repository.GetAllProducts();
+			return View(_result);
+		}
+
+		[Authorize]
+		public IActionResult BuyCart()
+		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return RedirectToAction("Login");
+			}
+
+			var result = _repository.GetUserBuyCart(Convert.ToInt32(userId));
+
+			return View(result);
+		}
+
+		[Authorize]
+		[HttpPost]
+		public IActionResult AddProductToBuyCart(int id)
+		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
+			var _result = _repository.AddProductToCartAsync(Convert.ToInt32(userId), id);
+
+
+			return Ok(_result.Result);
+		}
+
+		[HttpPost]
+		public IActionResult UpdateBuyCart([FromBody] BuyCart cart)
+		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+			var result = _repository.UpdateBuyCartAsync(Convert.ToInt32(userId), cart);
+			return Ok(result.Result);
+		}
+
+		[HttpPost]
+		public IActionResult DeleteBuyCart(int id)
+		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+			var result = _repository.DeleteBuyCartAsync(Convert.ToInt32(userId), id);
+			return Ok(result.Result);
+		}
+
+		[Authorize]
+		public IActionResult CheckOut(string discount)
+		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
+			if (discount == "usecoupon") ViewData["usecoupon"] = 200;
+
+			var result = _repository.GetUserBuyCart(Convert.ToInt32(userId));
+
+			return View(result);
+		}
+
+		#endregion
+
+		#region Administrator
+
+		[Authorize(Roles = "Admin")]
+		public IActionResult AdminHomePage()//等產品新增功能及頁面完成 要再處理此頁面的產品資料
+		{
+			return View();
+		}
+
+		[Authorize(Roles = "Admin")]
+		public IActionResult AdminCreateProduct()
+		{
+			return View();
+		}
+
+		[Authorize(Roles = "Admin")]
+		public IActionResult AdminListProducts()
+		{
+			return View();
+		}
+
+		[Authorize(Roles = "Admin")]
+		public IActionResult AdminDiscontinuedProducts()
+		{
+			return View();
+		}
+
+		#endregion
+
+		#region ErrorHandle
 		//權限不足
 		public IActionResult AccessDeny()
 		{
 			return View();
 		}
-
-		public IActionResult AdminCreateProduct()
-        {
-			return View();
-        }
-
-		public IActionResult AdminListProducts()
-        {
-			return View();
-        }
-
-		public IActionResult AdminDiscontinuedProducts()
-        {
-			return View();
-        }
-
+		#endregion
 
 		#region Test
 		[Authorize]

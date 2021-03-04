@@ -1,329 +1,184 @@
 ﻿@model IEnumerable<ASP_NET_Core_Shop.Models.Product>
 
 @{
-    Layout = null;
+    ViewData["Title"] = "HomePage";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>Bootstrap Example</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            console.log("ready");
-            $.get('/api/WebAPI/GetUserName', function (data) {
-                console.log(data)
-                $(".username").text(data);
-            });
-        });
-        function AddToBuyCart(productId) {
-            $.post('AddProductToBuyCart/' + productId)
-                .done(function (message) {
-                    alert(message);
-                })
-                .fail(function (jqXHR, textStatus, err) {
-                    if (jqXHR.status == 401) {
-                        alert("請先登入會員!");
-                    }
-                })
-        }
-    </script>
-    <!-- Bootstrap core CSS -->
-    <link href="~/bootstrap-5.0.0-beta2-dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <style>
-        /* Make the image fully responsive */
-        .carousel-inner img {
-            width: 100%;
-            height: 100%;
-        }
-
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
-
-        @@media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
-    <!-- Custom styles for this template -->
-    <link href="~/css/carousel.css" rel="stylesheet">
-    <!-- Site CSS -->
-    <link href="/freshshop/css/style.css" rel="stylesheet">
-    <!-- Responsive CSS -->
-    @*<link href="~/freshshop/css/responsive.css" rel="stylesheet">*@
-    <!-- Custom CSS -->
-    @*<link href="~/freshshop/css/custom.css" rel="stylesheet">*@
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-award" viewBox="0 0 16 16">
-                        <path d="M9.669.864L8 0 6.331.864l-1.858.282-.842 1.68-1.337 1.32L2.6 6l-.306 1.854 1.337 1.32.842 1.68 1.858.282L8 12l1.669-.864 1.858-.282.842-1.68 1.337-1.32L13.4 6l.306-1.854-1.337-1.32-.842-1.68L9.669.864zm1.196 1.193l.684 1.365 1.086 1.072L12.387 6l.248 1.506-1.086 1.072-.684 1.365-1.51.229L8 10.874l-1.355-.702-1.51-.229-.684-1.365-1.086-1.072L3.614 6l-.25-1.506 1.087-1.072.684-1.365 1.51-.229L8 1.126l1.356.702 1.509.229z" />
-                        <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1 4 11.794z" />
-                    </svg>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">首頁</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">會員</a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdown01">
-                                <li>@Html.ActionLink("登入", "Login", "Shop", new { }, new { @class = "dropdown-item" })</li>
-                                <li>@Html.ActionLink("註冊", "SignUp", "Shop", new { }, new { @class = "dropdown-item" })</li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">會員登入</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active username" href=""></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">未啟用</a>
-                        </li>
-
-                    </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="商品名稱" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit" style="width:80px;height:38px;">搜尋</button>
-                    </form>
+<!-- Start Slider -->
+<div id="slides-shop" class="cover-slides">
+    <ul class="slides-container">
+        <li class="text-center">
+            <img src="/Images/Products/pexels-any-lane-5945560.jpg" alt="">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="m-b-20"><strong>Welcome To <br> Freshshop</strong></h1>
+                        <p class="m-b-40">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
+                        <p><a class="btn hvr-hover" href="#">Shop New</a></p>
+                    </div>
                 </div>
             </div>
-        </nav>
-    </header>
-    <!-- Start Slider -->
-    <div id="slides-shop" class="cover-slides">
-        <ul class="slides-container">
-            <li class="text-center">
-                <img src="/Images/Products/pexels-any-lane-5945560.jpg" alt="">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>Welcome To <br> Freshshop</strong></h1>
-                            <p class="m-b-40">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
-                            <p><a class="btn hvr-hover" href="#">Shop New</a></p>
+        </li>
+        <li class="text-center">
+            <img src="/Images/Products/pexels-lucie-liz-3957500.jpg" alt="">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="m-b-20"><strong>Welcome To <br> Freshshop</strong></h1>
+                        <p class="m-b-40">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
+                        <p><a class="btn hvr-hover" href="#">Shop New</a></p>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="text-center">
+            <img src="/Images/Products/pexels-marta-dzedyshko-2067621.jpg" alt="">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="m-b-20"><strong>Welcome To <br> Freshshop</strong></h1>
+                        <p class="m-b-40">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
+                        <p><a class="btn hvr-hover" href="#">Shop New</a></p>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="slides-navigation">
+        <a href="#" class="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+        <a href="#" class="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+    </div>
+</div>
+<!-- End Slider -->
+<main>
+    <!-- Start Blog  -->
+    <div class="latest-blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="title-all text-center">
+                        <h1>我們堅持</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-4 col-xl-4">
+                    <div class="blog-box">
+                        <div class="blog-img">
+                            <img class="img-fluid" src="/Images/HomePage/pexels-pixabay-265242.jpg" alt="" />
+                        </div>
+                        <div class="blog-content">
+                            <div class="title-blog">
+                                <h3>嚴選天然食材</h3>
+                                <p>每一口都能感受天然香氣，且健康無負擔!</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </li>
-            <li class="text-center">
-                <img src="/Images/Products/pexels-lucie-liz-3957500.jpg" alt="">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>Welcome To <br> Freshshop</strong></h1>
-                            <p class="m-b-40">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
-                            <p><a class="btn hvr-hover" href="#">Shop New</a></p>
+                <div class="col-md-6 col-lg-4 col-xl-4">
+                    <div class="blog-box">
+                        <div class="blog-img">
+                            <img class="img-fluid" src="/Images/HomePage/pexels-daria-shevtsova-1070946.jpg" alt="" />
+                        </div>
+                        <div class="blog-content">
+                            <div class="title-blog">
+                                <h3>多樣化的選擇</h3>
+                                <p>滿足您的各種需求與任性又挑剔的味蕾</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </li>
-            <li class="text-center">
-                <img src="/Images/Products/pexels-marta-dzedyshko-2067621.jpg" alt="">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>Welcome To <br> Freshshop</strong></h1>
-                            <p class="m-b-40">See how your users experience your website in realtime or view <br> trends to see any changes in performance over time.</p>
-                            <p><a class="btn hvr-hover" href="#">Shop New</a></p>
+                <div class="col-md-6 col-lg-4 col-xl-4">
+                    <div class="blog-box">
+                        <div class="blog-img">
+                            <img class="img-fluid" src="/Images/HomePage/pexels-karolina-grabowska-4506249.jpg" alt="" />
+                        </div>
+                        <div class="blog-content">
+                            <div class="title-blog">
+                                <h3>快速新鮮送達</h3>
+                                <p>當天出爐並送達，堅持讓您品嚐最佳風味!</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </li>
-        </ul>
-        <div class="slides-navigation">
-            <a href="#" class="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-            <a href="#" class="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+            </div>
         </div>
     </div>
-    <!-- End Slider -->
-    <main>
-        <!-- Start Blog  -->
-        <div class="latest-blog">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="title-all text-center">
-                            <h1>我們堅持</h1>
-                        </div>
+    <!-- End Blog  -->
+    <!-- Start Products  -->
+    <div class="products-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="title-all text-center">
+                        <h1>熱門商品區</h1>
+                        <p></p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 col-lg-4 col-xl-4">
-                        <div class="blog-box">
-                            <div class="blog-img">
-                                <img class="img-fluid" src="/Images/HomePage/pexels-pixabay-265242.jpg" alt="" />
-                            </div>
-                            <div class="blog-content">
-                                <div class="title-blog">
-                                    <h3>嚴選天然食材</h3>
-                                    <p>每一口都能感受天然香氣，且健康無負擔!</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4 col-xl-4">
-                        <div class="blog-box">
-                            <div class="blog-img">
-                                <img class="img-fluid" src="/Images/HomePage/pexels-daria-shevtsova-1070946.jpg" alt="" />
-                            </div>
-                            <div class="blog-content">
-                                <div class="title-blog">
-                                    <h3>多樣化的選擇</h3>
-                                    <p>滿足您的各種需求與任性又挑剔的味蕾</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4 col-xl-4">
-                        <div class="blog-box">
-                            <div class="blog-img">
-                                <img class="img-fluid" src="/Images/HomePage/pexels-karolina-grabowska-4506249.jpg" alt="" />
-                            </div>
-                            <div class="blog-content">
-                                <div class="title-blog">
-                                    <h3>快速新鮮送達</h3>
-                                    <p>當天出爐並送達，堅持讓您品嚐最佳風味!</p>
-                                </div>
-                            </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="special-menu text-center">
+                        <div class="button-group filter-button-group">
+                            <!--這裡是依照data-filter切換下面產品 後續要改成動態讀取-->
+                            <button class="active" data-filter="*">全部</button>
+                            <button data-filter=".hot-new">熱門新品</button>
+                            <button data-filter=".best-seller">人氣商品</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- End Blog  -->
-        <!-- Start Products  -->
-        <div class="products-box">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="title-all text-center">
-                            <h1>熱門商品區</h1>
-                            <p></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="special-menu text-center">
-                            <div class="button-group filter-button-group">
-                                <!--這裡是依照data-filter切換下面產品 後續要改成動態讀取-->
-                                <button class="active" data-filter="*">全部</button>
-                                <button data-filter=".hot-new">熱門新品</button>
-                                <button data-filter=".best-seller">人氣商品</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="row special-list">
-                    <div class="col-lg-3 col-md-6 special-grid best-seller">
-                        <div class="products-single fix">
-                            <div class="box-img-hover">
-                                <div class="type-lb">
-                                    <p class="sale">人氣商品</p>
-                                </div>
-                                <img src="/Images/Products/伯爵海綿蛋糕20210228105056675.jpg" class="img-fluid" alt="Image">
-                            </div>
-                            <div class="why-text">
-                                <h4>Lorem ipsum dolor sit amet</h4>
-                                <h5>NT$700</h5>
-                            </div>
-                            <button class="btn btn-outline-success" type="submit" style="width:150px;height:38px;">加入購物車</button>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 special-grid hot-new">
-                        <div class="products-single fix">
-                            <div class="box-img-hover">
-                                <div class="type-lb">
-                                    <p class="new">熱門新品</p>
-                                </div>
-                                <img src="/Images/Products/伯爵海綿蛋糕20210228105056675.jpg" class="img-fluid" alt="Image">
-                            </div>
-                            <div class="why-text">
-                                <h4>Lorem ipsum dolor sit amet</h4>
-                                <h5>NT$700</h5>
-                            </div>
-                            <button class="btn btn-outline-success" type="submit" style="width:150px;height:38px;">加入購物車</button>
-                        </div>
-                    </div>
-                    @foreach (var item in Model)
+            <div class="row special-list">
+                @foreach (var item in Model)
+                {
+                    var title = "";
+                    var category = "";
+                    var pClass = "";
+                    if (item.Stock >= 10)
                     {
-                        var title = "";
-                        var category = "";
-                        var pClass = "";
-                        if (item.Stock >= 10)
-                        {
-                            category = "hot-new";
-                            title = "熱門新品";
-                            pClass = "new";
-                        }
-                        else if (item.Stock <= 5)
-                        {
-                            category = "best-seller";
-                            title = "人氣商品";
-                            pClass = "sale";
-                        }
-                        <div class="col-lg-3 col-md-6 special-grid @category">
-                            <div class="products-single fix">
-                                <div class="box-img-hover">
-                                    <div class="type-lb">
-                                        <p class="@pClass">@title</p>
-                                    </div>
-                                    <img src="@item.Image" class="img-fluid" alt="Image">
-                                </div>
-                                <div class="why-text">
-                                    <h4>@item.Name</h4>
-                                    <h5>NT$@item.Price</h5>
-                                </div>
-                                <button class="btn btn-outline-success" id="@item.Id" type="submit" onclick="AddToBuyCart(this.id)" style="width:150px;height:38px;">加入購物車</button>
-                            </div>
-                        </div>
+                        category = "hot-new";
+                        title = "熱門新品";
+                        pClass = "new";
                     }
-                </div>
+                    else if (item.Stock <= 5)
+                    {
+                        category = "best-seller";
+                        title = "人氣商品";
+                        pClass = "sale";
+                    }
+                    <div class="col-lg-3 col-md-6 special-grid @category">
+                        <div class="products-single fix">
+                            <div class="box-img-hover">
+                                <div class="type-lb">
+                                    <p class="@pClass">@title</p>
+                                </div>
+                                <img src="@item.Image" class="img-fluid" alt="Image">
+                            </div>
+                            <div class="why-text">
+                                <h4>@item.Name</h4>
+                                <h5>NT$@item.Price</h5>
+                            </div>
+                            <button class="btn btn-outline-success" id="@item.Id" type="submit" onclick="AddToBuyCart(this.id)" style="width:150px;height:38px;">加入購物車</button>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
-        <!-- End Products  -->
-    </main>
-
-    <script src="/bootstrap-5.0.0-beta2-dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <!-- ALL JS FILES -->
-    @*<script src="~/freshshop/js/jquery-3.2.1.min.js"></script>*@
-    @*<script src="~/freshshop/js/popper.min.js"></script>*@
-    @*<script src="~/freshshop/js/bootstrap.min.js"></script>*@
-    <!-- ALL PLUGINS -->
-    <script src="~/freshshop/js/jquery.superslides.min.js"></script>
-    @*<script src="~/freshshop/js/bootstrap-select.js"></script>*@
-    @*<script src="~/freshshop/js/inewsticker.js"></script>*@
-    @*<script src="~/freshshop/js/bootsnav.js."></script>*@
-    <script src="~/freshshop/js/images-loded.min.js"></script>
-    <script src="~/freshshop/js/isotope.min.js"></script>
-    @*<script src="~/freshshop/js/owl.carousel.min.js"></script>*@
-    @*<script src="~/freshshop/js/baguetteBox.min.js"></script>*@
-    @*<script src="~/freshshop/js/form-validator.min.js"></script>*@
-    @*<script src="~/freshshop/js/contact-form-script.js"></script>*@
-    <script src="~/freshshop/js/custom.js"></script>
-</body>
-</html>
+    </div>
+    <!-- End Products  -->
+</main>
+<script>
+    function AddToBuyCart(productId) {
+        $.post('AddProductToBuyCart/' + productId)
+            .done(function (message) {
+                alert(message);
+            })
+            .fail(function (jqXHR, textStatus, err) {
+                if (jqXHR.status == 401) {
+                    alert("請先登入會員!");
+                }
+            })
+    }
+</script>
