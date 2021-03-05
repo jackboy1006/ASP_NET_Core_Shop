@@ -22,7 +22,7 @@ namespace ASP_NET_Core_Shop.Models
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductType> ProductTypes { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserTable> UserTables { get; set; }
 
 //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 //        {
@@ -77,9 +77,22 @@ namespace ASP_NET_Core_Shop.Models
 
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
+                entity.Property(e => e.OrderNum)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.ShipAddress)
                     .IsRequired()
                     .HasMaxLength(100);
+
+                entity.Property(e => e.ShipArea)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ShipCity)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -145,7 +158,7 @@ namespace ASP_NET_Core_Shop.Models
                     .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<User>(entity =>
+            modelBuilder.Entity<UserTable>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 

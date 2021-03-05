@@ -28,6 +28,11 @@
                             <div class="invalid-feedback">請輸入Email!</div>
                         </div>
                         <div class="mb-3">
+                            <label for="email">收件人電話 *</label>
+                            <input type="text" class="form-control" id="phone" placeholder="" required>
+                            <div class="invalid-feedback">請輸入連絡電話!</div>
+                        </div>
+                        <div class="mb-3">
                             <label for="address">收件地址 *</label>
                             <input type="text" class="form-control" id="address" placeholder="" required>
                             <div class="invalid-feedback">請輸入收件地址!</div>
@@ -37,8 +42,8 @@
                                 <label for="city">縣市 *</label>
                                 <select class="wide w-100" id="city" onclick="switchCity(this.value)" required>
                                     <option value="" data-display="Select">請選擇...</option>
-                                    <option value="Taipei">台北市</option>
-                                    <option value="NewTaipei">新北市</option>
+                                    <option value="台北市">台北市</option>
+                                    <option value="新北市">新北市</option>
                                 </select>
                                 <div class="invalid-feedback">請選擇縣市!</div>
                             </div>
@@ -191,18 +196,20 @@
     var newTaipeiOption = ["板橋區", "中和區", "新莊區", "土城區", "汐止區", "鶯歌區", "淡水區", "五股區", "林口區", "深坑區"
         , "坪林區", "石門區", "萬里區", "雙溪區", "烏來區", "三重區", "永和區", "新店區", "蘆洲區", "樹林區"
         , "三峽區", "瑞芳區", "泰山區", "八里區", "石碇區", "三芝區", "金山區", "平溪區", "貢寮區"];
-
+    var total = 0;
+    var finalTotal = 0;
+    var discount = 0;
     function switchCity(value) {
-        if (value == "Taipei") {
+        if (value == "台北市") {
             $('#area').empty();
             for (var i = 0; i < taipeiOption.length; i++) {
-                $('#area').append(`<option>${taipeiOption[i]}</option>`);
+                $('#area').append(`<option value="${taipeiOption[i]}">${taipeiOption[i]}</option>`);
             }
         }
-        else if (value == "NewTaipei") {
+        else if (value == "新北市") {
             $('#area').empty();
             for (var i = 0; i < newTaipeiOption.length; i++) {
-                $('#area').append(`<option>${newTaipeiOption[i]}</option>`);
+                $('#area').append(`<option value="${newTaipeiOption[i]}">${newTaipeiOption[i]}</option>`);
             }
         }
         else {
@@ -225,7 +232,12 @@
                 },
                 body: JSON.stringify({
                     buyerName: $("#username").val(),
-                    buyerEmail: $("#email").val()
+                    buyerEmail: $("#email").val(),
+                    buyerPhone: $("#phone").val(),
+                    shipAddress: $("#address").val(),
+                    shipCity: $("#city").val(),
+                    shipArea: $("#area").val(),
+                    total: finalTotal
                 })
             })
                 .then(response => response.json())
@@ -239,22 +251,20 @@
     $(document).ready(function () {
         console.log(@ViewData["usecoupon"]);
         @{ 
-            var total = 0;
-            var finalTotal = 0;
-            var discount = 0;
+            
             if (ViewData["usecoupon"] != null)
             {
-                discount = int.Parse(ViewData["usecoupon"].ToString());
+                @:discount = @int.Parse(ViewData["usecoupon"].ToString());
             }
 
             foreach (var item in Model)
             {
-                total += (item.Product.Price * item.Quantity);
+                @:total += @(item.Product.Price * item.Quantity);
             }
-            finalTotal += (150 + total - discount);
+            @:finalTotal += (150 + total - discount);
         }
-        document.getElementById("total").textContent = @total;
-        document.getElementById("finalTotal").textContent = "NT$ @finalTotal";
+        document.getElementById("total").textContent = total;
+        document.getElementById("finalTotal").textContent = `NT$ ${finalTotal}`;
     });
 </script>
 

@@ -8,12 +8,12 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 {
 	public interface IRepository
 	{
-		IQueryable<User> GetAllUsers();
-		User GetUserById(int id);
-		User GetUserByName(string name);
-		bool AddUser(User user);
-		bool DeleteUser(User user);
-		User UserLogin(User user);
+		IQueryable<UserTable> GetAllUsers();
+		UserTable GetUserById(int id);
+		UserTable GetUserByName(string name);
+		bool AddUser(UserTable user);
+		bool DeleteUser(UserTable user);
+		UserTable UserLogin(UserTable user);
 
 
 		Task<string> AddProductAsync(IFormCollection product, IFormFile image);
@@ -28,5 +28,6 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 		List<BuyCart> GetUserBuyCart(int id);
 		Task<string> UpdateBuyCartAsync(int userId, BuyCart cart);
 		Task<string> DeleteBuyCartAsync(int userId, int productId);
+		Task<string> CreateOrderAsync(int userId, Order order);
 	}
 }

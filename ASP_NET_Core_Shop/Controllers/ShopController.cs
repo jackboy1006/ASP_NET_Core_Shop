@@ -30,7 +30,7 @@ namespace ASP_NET_Core_Shop.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Login(User _user)
+		public IActionResult Login(UserTable _user)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -38,7 +38,7 @@ namespace ASP_NET_Core_Shop.Controllers
 				return View();
 			}
 
-			User userData = _repository.UserLogin(_user);
+			UserTable userData = _repository.UserLogin(_user);
 
 			if (userData == null)
 			{
@@ -77,7 +77,7 @@ namespace ASP_NET_Core_Shop.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult SignUp(User _user)
+		public IActionResult SignUp(UserTable _user)
 		{
 			bool check = _repository.AddUser(_user);
 			if (!check)
@@ -235,7 +235,26 @@ namespace ASP_NET_Core_Shop.Controllers
 		[HttpPost]
 		public IActionResult CreateOrder([FromBody]Order order)
         {
-			return Ok(order.BuyerName);
+            string userId = "";
+            ClaimsPrincipal principal = HttpContext.User;
+            if (principal != null)
+            {
+                foreach (Claim claim in principal.Claims)
+                {
+                    if (claim.Type == "User_ID")
+                    {
+                        userId = claim.Value;
+                    }
+                }
+            }
+            else
+            {
+                return StatusCode(401);
+            }
+
+            var result = _repository.CreateOrderAsync(Convert.ToInt32(userId), order);
+
+            return Ok(result.Result);
         }
 
 		#endregion
@@ -277,6 +296,29 @@ namespace ASP_NET_Core_Shop.Controllers
 		#endregion
 
 		#region Test
+		public IActionResult Testsql()
+        {
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+			Order empty = new Order();
+
+			return View(_repository.CreateOrderAsync(Convert.ToInt32(userId), empty));
+		}
+
 		[Authorize]
 		public IActionResult TestLogin()
 		{

@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ASP_NET_Core_Shop.Models;
+using ASP_NET_Core_Shop.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using MyDLL;
+
+using Dapper;
+using System.Data;
+using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace ASP_NET_Core_Shop.Models.Repositories
 {
@@ -17,50 +22,50 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 		{
 			_db = context;
 		}
-		public bool AddUser(User user)
+		public bool AddUser(UserTable user)
 		{
-			IQueryable<User> data = from u
-									in _db.Users
-									where u.UserName == user.UserName || u.Email == user.Email
+			IQueryable<UserTable> data = from u
+									in _db.UserTables
+										 where u.UserName == user.UserName || u.Email == user.Email
 									select u;
-			User _result = data.FirstOrDefault();
+			UserTable _result = data.FirstOrDefault();
 			if (_result != null) return false;
 
 			string hashStr = Account.GetSHA1Hash(user.Password);
 			user.Password = hashStr;
-			_db.Users.Add(user);
+			_db.UserTables.Add(user);
 			_db.SaveChanges();
 			return true;
 		}
 
-		public bool DeleteUser(User user)
+		public bool DeleteUser(UserTable user)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IQueryable<User> GetAllUsers()
+		public IQueryable<UserTable> GetAllUsers()
 		{
 			throw new NotImplementedException();
 		}
 
-		public User GetUserById(int id)
+		public UserTable GetUserById(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public User GetUserByName(string name)
+		public UserTable GetUserByName(string name)
 		{
 			throw new NotImplementedException();
 		}
 
-		public User UserLogin(User user)
+		public UserTable UserLogin(UserTable user)
 		{
 			string sha256 = Account.GetSHA1Hash(user.Password);
-			IQueryable<User> data = from u
-									in _db.Users
-									where u.UserName == user.UserName && u.Password == sha256
+			IQueryable<UserTable> data = from u
+									in _db.UserTables
+										 where u.UserName == user.UserName && u.Password == sha256
 									select u;
-			User _result = data.FirstOrDefault();
+			UserTable _result = data.FirstOrDefault();
 			if (_result == null) return null;
 			return _result;
 		}
@@ -284,5 +289,60 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 			await _db.SaveChangesAsync();
 			return "此商品已成功刪除!";
 		}
-	}
+
+        public async Task<string> CreateOrderAsync(int userId, Order order)
+        {
+            IQueryable<BuyCart> getUserCarts = from carts
+                                               in _db.BuyCarts
+                                               where carts.UserId == userId
+                                               select carts;
+            List<BuyCart> userCatrs = getUserCarts.ToList();
+            if (userCatrs == null) return "購物車已不存在請重新選購!";
+
+            order.UserId = userId;//只需要給外鍵 對應的id 就會自動連上
+            order.OrderNum = DateTime.Now.ToString("yyyyMMddhhmmssfff");
+            order.IsPaid = true;
+			order.CreatedAt = DateTime.Now;
+
+
+			var configurationBuilder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+			IConfiguration config = configurationBuilder.Build();
+			string connectionString = config["ConnectionStrings:DBConnectionString"];
+			var resultDictionary = new Dictionary<int, Order>();
+			using (SqlConnection Conn = new SqlConnection(connectionString))
+			{
+				Conn.Open();
+
+				string sqlstr = "SELECT * FROM BuyCart b LEFT JOIN Products p On b.ProductID = p.id ";
+				sqlstr += "LEFT JOIN UserTables u On b.UserID = u.id";
+				var orderViewModels = (await Conn.QueryAsync< BuyCart, Product, UserTable, CreateOrderViewModel>(sqlstr, 
+					(bt,pt,ut) => {
+						CreateOrderViewModel dtEntry = new CreateOrderViewModel();
+						OrderDetail orderDetail = new OrderDetail();
+						orderDetail.ProductName = bt.ProductName;
+						orderDetail.Quantity = bt.Quantity;
+						orderDetail.ProductPrice = pt.Price;
+						orderDetail.ProductImage = pt.Image;
+						dtEntry.userTable = ut;
+						dtEntry.orderDetail = orderDetail;
+						return dtEntry;
+					}, splitOn: "id,id")).ToList();
+                foreach (var viewModel in orderViewModels)
+                {
+                    if (viewModel.userTable.Id == userId)
+                    {
+						if (order.User == null)
+                        {
+							//order.User. = viewModel.userTable;
+						}
+						order.OrderDetails.Add(viewModel.orderDetail);//將一對多的(多)表單明細加進去 就會自動生成對應的明細表單
+                    }
+                }
+                _db.Orders.Add(order);
+                _db.SaveChanges();
+
+                return "已完成訂單!";
+			}
+        }
+    }
 }
