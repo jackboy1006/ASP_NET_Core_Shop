@@ -240,11 +240,17 @@
                     total: finalTotal
                 })
             })
-                .then(response => response.json())
-                .then((data) => {
-                    console.log(data);
-                })
-                .catch(err => console.error('Unable to add order.', err))
+            .then(function (response) {
+                if (response.status == 401) {
+                    alert("權限有誤! 請重新登入會員!");
+                    throw new Error("HTTP status " + response.status);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                alert(data);
+            })
+            .catch(err => console.error('Unable to add order.', err))
         }
     }
 

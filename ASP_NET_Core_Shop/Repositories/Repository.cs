@@ -290,32 +290,22 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 			return "此商品已成功刪除!";
 		}
 
-        public async Task<string> CreateOrderAsync(int userId, Order order)
+        public string CreateOrderAsync(int userId, Order order)
         {
-            IQueryable<BuyCart> getUserCarts = from carts
-                                               in _db.BuyCarts
-                                               where carts.UserId == userId
-                                               select carts;
-            List<BuyCart> userCatrs = getUserCarts.ToList();
-            if (userCatrs == null) return "購物車已不存在請重新選購!";
-
-            order.UserId = userId;//只需要給外鍵 對應的id 就會自動連上
-            order.OrderNum = DateTime.Now.ToString("yyyyMMddhhmmssfff");
-            order.IsPaid = true;
-			order.CreatedAt = DateTime.Now;
-
-
+			//使用ADO.NET + Dapper 建立商品訂單
 			var configurationBuilder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
 			IConfiguration config = configurationBuilder.Build();
 			string connectionString = config["ConnectionStrings:DBConnectionString"];
-			var resultDictionary = new Dictionary<int, Order>();
+
+			List<BuyCart> userCarts = new List<BuyCart>();
+
 			using (SqlConnection Conn = new SqlConnection(connectionString))
 			{
 				Conn.Open();
 
 				string sqlstr = "SELECT * FROM BuyCart b LEFT JOIN Products p On b.ProductID = p.id ";
 				sqlstr += "LEFT JOIN UserTables u On b.UserID = u.id";
-				var orderViewModels = (await Conn.QueryAsync< BuyCart, Product, UserTable, CreateOrderViewModel>(sqlstr, 
+				var orderViewModels = Conn.Query< BuyCart, Product, UserTable, CreateOrderViewModel>(sqlstr, 
 					(bt,pt,ut) => {
 						CreateOrderViewModel dtEntry = new CreateOrderViewModel();
 						OrderDetail orderDetail = new OrderDetail();
@@ -325,24 +315,78 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 						orderDetail.ProductImage = pt.Image;
 						dtEntry.userTable = ut;
 						dtEntry.orderDetail = orderDetail;
-						return dtEntry;
-					}, splitOn: "id,id")).ToList();
-                foreach (var viewModel in orderViewModels)
-                {
-                    if (viewModel.userTable.Id == userId)
-                    {
-						if (order.User == null)
-                        {
-							//order.User. = viewModel.userTable;
-						}
-						order.OrderDetails.Add(viewModel.orderDetail);//將一對多的(多)表單明細加進去 就會自動生成對應的明細表單
-                    }
-                }
-                _db.Orders.Add(order);
-                _db.SaveChanges();
 
-                return "已完成訂單!";
+                        if (bt.UserId == userId)
+                        {
+							userCarts.Add(bt);
+						}
+
+						return dtEntry;
+					}, splitOn: "id,id").ToList();
+
+				if(userCarts.Count == 0) return "購物車已不存在請重新選購!";
+
+				order.UserId = userId;
+				order.OrderNum = DateTime.Now.ToString("yyyyMMddhhmmssfff");
+				order.IsPaid = true;
+				order.CreatedAt = DateTime.Now;
+
+				foreach (var viewModel in orderViewModels.Where(item => item.userTable.Id == userId))
+                {
+					order.OrderDetails.Add(viewModel.orderDetail);
+				}
+
+				sqlstr = "INSERT INTO [Orders] ([UserID], [OrderNum], [BuyerName], [BuyerEmail], [BuyerPhone]," +
+					" [ShipAddress], [ShipCity], [ShipArea], [IsPaid], [IsShipped], [IsDone], [IsCancel], [Total], [CreatedAt])";
+				sqlstr += " VALUES (@UserId, @OrderNum, @BuyerName, @BuyerEmail, @BuyerPhone, @ShipAddress, @ShipCity, @ShipArea," +
+					" @IsPaid, @IsShipped, @IsDone, @IsCancel, @Total, @CreatedAt);";
+
+				var orderParameters = new
+				{
+					UserId = order.UserId,
+					OrderNum = order.OrderNum,
+					BuyerName = order.BuyerName,
+					BuyerEmail = order.BuyerEmail,
+					BuyerPhone = order.BuyerPhone,
+					ShipAddress = order.ShipAddress,
+					ShipCity = order.ShipCity,
+					ShipArea = order.ShipArea,
+					IsPaid = order.IsPaid,
+					IsShipped = order.IsShipped,
+					IsDone = order.IsDone,
+					IsCancel = order.IsCancel,
+					Total = order.Total,
+					CreatedAt = order.CreatedAt
+				};
+
+				int affectedRows = Conn.Execute(sqlstr, orderParameters);
+
+				sqlstr = "SELECT * FROM [Orders] WHERE UserID = @UserId AND OrderNum = @OrderNum";
+				var selectorderParameter = new
+				{
+					UserId = userId,
+					OrderNum = order.OrderNum
+				};
+
+				var thisOrder = Conn.QuerySingle<Order>(sqlstr, selectorderParameter);
+
+                foreach (var details in order.OrderDetails)
+                {
+					details.OrderId = thisOrder.Id;
+				}
+
+				sqlstr = "INSERT INTO [OrderDetails] ([OrderID], [ProductImage], [ProductName], [ProductPrice], [Quantity]) " +
+					"VALUES (@OrderId, @ProductImage, @ProductName, @ProductPrice, @Quantity);";
+
+				int affectedDetailRows = Conn.Execute(sqlstr, order.OrderDetails);
+
+				sqlstr = "DELETE FROM [BuyCart] WHERE [UserID] = @UserId";
+				int affectedDeleteRows = Conn.Execute(sqlstr, new { UserId = userId });
 			}
-        }
+   //         _db.BuyCarts.RemoveRange(userCarts);
+			//_db.SaveChanges();
+
+            return "已完成訂單!";
+		}
     }
 }

@@ -253,8 +253,7 @@ namespace ASP_NET_Core_Shop.Controllers
             }
 
             var result = _repository.CreateOrderAsync(Convert.ToInt32(userId), order);
-
-            return Ok(result.Result);
+            return Ok(result);
         }
 
 		#endregion
