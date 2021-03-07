@@ -303,6 +303,7 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 			{
 				Conn.Open();
 
+				//取得訂單明細需要的資料 (購物車, 產品, 使用者)
 				string sqlstr = "SELECT * FROM BuyCart b LEFT JOIN Products p On b.ProductID = p.id ";
 				sqlstr += "LEFT JOIN UserTables u On b.UserID = u.id";
 				var orderViewModels = Conn.Query< BuyCart, Product, UserTable, CreateOrderViewModel>(sqlstr, 
@@ -315,7 +316,7 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 						orderDetail.ProductImage = pt.Image;
 						dtEntry.userTable = ut;
 						dtEntry.orderDetail = orderDetail;
-
+						//查詢的同時 存取此使用者的所有購物車
                         if (bt.UserId == userId)
                         {
 							userCarts.Add(bt);
@@ -331,11 +332,13 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 				order.IsPaid = true;
 				order.CreatedAt = DateTime.Now;
 
+				//取得使用者的訂單明細
 				foreach (var viewModel in orderViewModels.Where(item => item.userTable.Id == userId))
                 {
 					order.OrderDetails.Add(viewModel.orderDetail);
 				}
 
+				//建立訂單
 				sqlstr = "INSERT INTO [Orders] ([UserID], [OrderNum], [BuyerName], [BuyerEmail], [BuyerPhone]," +
 					" [ShipAddress], [ShipCity], [ShipArea], [IsPaid], [IsShipped], [IsDone], [IsCancel], [Total], [CreatedAt])";
 				sqlstr += " VALUES (@UserId, @OrderNum, @BuyerName, @BuyerEmail, @BuyerPhone, @ShipAddress, @ShipCity, @ShipArea," +
@@ -360,33 +363,108 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 				};
 
 				int affectedRows = Conn.Execute(sqlstr, orderParameters);
-
+				//取得剛建立的訂單
 				sqlstr = "SELECT * FROM [Orders] WHERE UserID = @UserId AND OrderNum = @OrderNum";
-				var selectorderParameter = new
-				{
-					UserId = userId,
-					OrderNum = order.OrderNum
-				};
-
-				var thisOrder = Conn.QuerySingle<Order>(sqlstr, selectorderParameter);
-
+				var thisOrder = Conn.QuerySingle<Order>(sqlstr, new { UserId = userId, OrderNum = order.OrderNum });
+				//設定訂單明細關聯的訂單id
                 foreach (var details in order.OrderDetails)
                 {
 					details.OrderId = thisOrder.Id;
 				}
-
+				//建立明細
 				sqlstr = "INSERT INTO [OrderDetails] ([OrderID], [ProductImage], [ProductName], [ProductPrice], [Quantity]) " +
 					"VALUES (@OrderId, @ProductImage, @ProductName, @ProductPrice, @Quantity);";
-
 				int affectedDetailRows = Conn.Execute(sqlstr, order.OrderDetails);
-
+				//清空此使用者購物車
 				sqlstr = "DELETE FROM [BuyCart] WHERE [UserID] = @UserId";
 				int affectedDeleteRows = Conn.Execute(sqlstr, new { UserId = userId });
 			}
-   //         _db.BuyCarts.RemoveRange(userCarts);
-			//_db.SaveChanges();
 
             return "已完成訂單!";
 		}
+
+        public List<Order> GetUserOrders(int userId)
+        {
+			IQueryable<Order> getUserOrders = from o
+											  in _db.Orders
+											  where o.UserId == userId
+											  select new Order
+											  {
+												  Id = o.Id,
+												  OrderNum = o.OrderNum,
+												  BuyerName = o.BuyerName,
+												  BuyerEmail = o.BuyerEmail,
+												  BuyerPhone = o.BuyerPhone,
+												  ShipAddress = o.ShipAddress,
+												  IsPaid = o.IsPaid,
+												  IsDone = o.IsDone,
+												  IsShipped = o.IsShipped,
+												  IsCancel = o.IsCancel,
+												  CreatedAt = o.CreatedAt,
+												  Total = o.Total,
+												  OrderDetails = o.OrderDetails
+											  };
+			List<Order> userOrders = getUserOrders.ToList();
+			return userOrders;
+		}
+
+        public string CancelOrder(int userId, int orderId)
+        {
+			IQueryable<Order> getOrder = from o
+										 in _db.Orders
+										 where o.UserId == userId && o.Id == orderId
+										 select o;
+			Order order = getOrder.FirstOrDefault();
+			if (order == null) return "此訂單已不存在! 請重新登入!";
+
+			order.IsCancel = true;
+			_db.Update(order);
+			_db.SaveChanges();
+			return "已完成取消申請!";
+		}
+
+        public List<Order> GetAllOrders()
+        {
+			IQueryable<Order> getOrders = from o
+										  in _db.Orders
+										  select new Order
+										  {
+											  Id = o.Id,
+											  UserId = o.UserId,
+											  OrderNum = o.OrderNum,
+											  BuyerName = o.BuyerName,
+											  BuyerEmail = o.BuyerEmail,
+											  BuyerPhone = o.BuyerPhone,
+											  ShipAddress = o.ShipAddress,
+											  ShipCity = o.ShipCity,
+											  IsPaid = o.IsPaid,
+											  IsCancel = o.IsCancel,
+											  IsShipped = o.IsShipped,
+											  IsDone = o.IsDone,
+											  Total = o.Total,
+											  CreatedAt = o.CreatedAt,
+											  OrderDetails = o.OrderDetails
+										  };
+			List<Order> orders = getOrders.ToList();
+			return orders;
+		}
+
+        public string UpdateOrder(int id, Order order)
+        {
+			IQueryable<Order> getOrder = from o
+										 in _db.Orders
+										 where o.Id == id
+										 select o;
+			Order userOrder = getOrder.FirstOrDefault();
+			if (userOrder == null) return "此訂單已不存在! 請重新確認!";
+
+			userOrder.IsCancel = order.IsCancel;
+			userOrder.IsDone = order.IsDone;
+			userOrder.IsPaid = order.IsPaid;
+			userOrder.IsShipped = order.IsShipped;
+			_db.Update(userOrder);
+			_db.SaveChanges();
+			return "訂單完成更新!";
+        }
     }
 }

@@ -98,5 +98,55 @@ namespace ASP_NET_Core_Shop.Controllers
 			};
 			return Ok(result);
 		}
+		[HttpPost]
+		[Route("GetAllOrders")]
+		public IActionResult GetAllOrders()
+        {
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
+			var result = _repository.GetAllOrders();
+			return Ok(result);
+		}
+		[HttpPatch]
+		[Route("Order/{id}")]
+		public IActionResult UpdateOrder(int id, Order order)
+        {
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
+			var result = _repository.UpdateOrder(id, order);
+
+			return Ok(result);
+        }
+
 	}
 }

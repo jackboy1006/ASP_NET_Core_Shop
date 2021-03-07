@@ -29,5 +29,9 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 		Task<string> UpdateBuyCartAsync(int userId, BuyCart cart);
 		Task<string> DeleteBuyCartAsync(int userId, int productId);
 		string CreateOrderAsync(int userId, Order order);
+		List<Order> GetUserOrders(int userId);
+		string CancelOrder(int userId, int orderId);
+		List<Order> GetAllOrders();
+		string UpdateOrder(int id, Order order);
 	}
 }

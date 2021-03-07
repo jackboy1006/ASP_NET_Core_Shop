@@ -1,0 +1,139 @@
+﻿@model IEnumerable<ASP_NET_Core_Shop.Models.Order>
+
+@{
+    ViewData["Title"] = "Order";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<div class="cart-box-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-main table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>訂單編號</th>
+                                <th>訂單明細</th>
+                                <th>收件人</th>
+                                <th>收件人Email</th>
+                                <th>收件人電話</th>
+                                <th>寄送地址</th>
+                                <th>金額</th>
+                                <th>訂購時間</th>
+                                <th>訂單狀態</th>
+                                <th>取消訂單</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.OrderNum
+                                    </td>
+                                    <td>
+                                        <p><a data-toggle="collapse" href="#orderDetails@(item.Id)" role="button" aria-expanded="false">檢視明細</a></p>
+                                        <div class="col-md-12 col-lg-12 collapse" id="orderDetails@(item.Id)">
+                                            <div class="odr-box">
+                                                <div class="rounded p-2 bg-light">
+                                                    @foreach (var detail in item.OrderDetails)
+                                                    {
+                                                        <div class="media mb-2 border-bottom">
+                                                            <div class="media-body">
+                                                                <a href="#">@detail.ProductName</a>
+                                                                <div class="small text-muted">單價: @detail.ProductPrice <span class="mx-2">|</span> 數量: @detail.Quantity <span class="mx-2">|</span> 金額: @(detail.ProductPrice * detail.Quantity)</div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p>@item.BuyerName</p>
+                                    </td>
+                                    <td>
+                                        <p>@item.BuyerEmail</p>
+                                    </td>
+                                    <td>
+                                        <p>@item.BuyerPhone</p>
+                                    </td>
+                                    <td>
+                                        <p>@item.ShipAddress</p>
+                                    </td>
+                                    <td>
+                                        <p>NT$ @item.Total</p>
+                                    </td>
+                                    <td>
+                                        <p>@item.CreatedAt</p>
+                                    </td>
+                                    <td>
+                                        @{ 
+                                            var status = "";
+                                            if (item.IsPaid && !item.IsShipped && !item.IsCancel && !item.IsDone)
+                                            {
+                                                status = "已付款處理中";
+                                            }
+                                            else if (item.IsPaid && item.IsShipped && !item.IsCancel && !item.IsDone)
+                                            {
+                                                status = "運送中";
+                                            }
+                                            else if (item.IsPaid && item.IsShipped && !item.IsCancel && item.IsDone)
+                                            {
+                                                status = "已完成";
+                                            }
+
+                                            if (item.IsCancel && !item.IsDone)
+                                            {
+                                                status = "取消中";
+                                            }
+                                            else if (item.IsCancel && item.IsDone)
+                                            {
+                                                status = "已取消";
+                                            }
+                                            <p>@status</p>
+                                        }
+                                    </td>
+                                    <td class="remove-pr">
+                                        @{
+                                            if (!item.IsCancel)
+                                            {
+                                                <a href="#" id="@item.Id" onclick="CancelOrder(this.id)">
+                                                    <i class="fas fa-times"></i>
+                                                </a>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                             }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function CancelOrder(id) {
+        fetch('CancelOrder/' + id, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(function (response) {
+            if (response.status == 401) {
+                alert("權限有誤! 請重新登入會員!");
+                throw new Error("HTTP status " + response.status);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            alert(data);
+            window.location.href = "Order";
+        })
+        .catch(err => console.error('Unable to add order.', err))
+    }
+</script>

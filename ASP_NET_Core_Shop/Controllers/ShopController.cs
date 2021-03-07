@@ -255,6 +255,54 @@ namespace ASP_NET_Core_Shop.Controllers
             var result = _repository.CreateOrderAsync(Convert.ToInt32(userId), order);
             return Ok(result);
         }
+		[Authorize]
+		public IActionResult Order()
+        {
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
+			var orders = _repository.GetUserOrders(Convert.ToInt32(userId));
+
+			return View(orders);
+		}
+		[HttpPost]
+		public IActionResult CancelOrder(int id)
+        {
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
+			var result = _repository.CancelOrder(Convert.ToInt32(userId), id);
+
+			return Ok(result);
+        }
 
 		#endregion
 
@@ -283,6 +331,11 @@ namespace ASP_NET_Core_Shop.Controllers
 		{
 			return View();
 		}
+		[Authorize(Roles = "Admin")]
+		public IActionResult AdminOrders()
+        {
+			return View();
+        }
 
 		#endregion
 
