@@ -3,7 +3,15 @@
     ViewData["Title"] = "AdminCreateProduct";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-
+<style>
+    @@media (min-width: 992px){
+        .mycol {
+            flex: 0 0 auto;
+            width: 40%;
+            margin: auto;
+        }
+    }
+</style>
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
@@ -32,12 +40,6 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="users"></span>
-                    使用者管理
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" asp-action="AdminOrders" asp-controller="Shop">
                     <span data-feather="bar-chart-2"></span>
                     訂單管理
@@ -45,44 +47,18 @@
             </li>
         </ul>
 
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Saved reports</span>
-            <a class="link-secondary" href="#" aria-label="Add a new report">
-                <span data-feather="plus-circle"></span>
-            </a>
-        </h6>
-        <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Current month
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Last quarter
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Social engagement
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Year-end sale
-                </a>
-            </li>
-        </ul>
+        
     </div>
 </nav>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="col-md-7 col-lg-8">
-        <h4 class="mb-3">新增產品</h4>
+    <section class="py-5 text-center container">
+        <div id="myDIV">
+            <h4 class="mb-3">新增產品</h4>
+        </div>
+    </section>
+    <div class="mycol">
+        
         <form class="needs-validation" novalidate id="create_product" enctype="multipart/form-data">
             <div class="row g-3">
 
@@ -146,19 +122,7 @@
 
             <hr class="my-4">
 
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="same-address">
-                <label class="form-check-label" for="same-address">Shipping address is the same as my billing address</label>
-            </div>
-
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="save-info">
-                <label class="form-check-label" for="save-info">Save this information for next time</label>
-            </div>
-
-            <hr class="my-4">
-
-            <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+            <button class="w-100 btn btn-primary btn-lg" type="submit">上架商品</button>
         </form>
     </div>
 </main>

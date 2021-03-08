@@ -1,0 +1,88 @@
+﻿@model IEnumerable<ASP_NET_Core_Shop.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<!-- Start All Title Box -->
+<div class="all-title-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Shop</h2>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Shop</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End All Title Box -->
+<!-- Start Products  -->
+<div class="products-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="title-all text-center">
+                    <h1>熱門商品區</h1>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="special-menu text-center">
+                    <div class="button-group filter-button-group">
+                        <!--這裡是依照data-filter切換下面產品 後續要改成動態讀取-->
+                        <button class="active" data-filter="*">全部</button>
+                        <button data-filter=".hot-new">熱門新品</button>
+                        <button data-filter=".best-seller">人氣商品</button>
+                        <button data-filter=".best-seller">蛋糕</button>
+                        <button data-filter=".best-seller">麵包</button>
+                        <button data-filter=".best-seller">甜點</button>
+                        <button data-filter=".best-seller">飲料</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row special-list">
+            @foreach (var item in Model)
+            {
+                var title = "";
+                var category = "";
+                var pClass = "";
+                if (item.Stock >= 10)
+                {
+                    category = "hot-new";
+                    title = "熱門新品";
+                    pClass = "new";
+                }
+                else if (item.Stock <= 5)
+                {
+                    category = "best-seller";
+                    title = "人氣商品";
+                    pClass = "sale";
+                }
+                <div class="col-lg-3 col-md-6 special-grid @category">
+                    <div class="products-single fix">
+                        <div class="box-img-hover">
+                            <div class="type-lb">
+                                <p class="@pClass">@title</p>
+                            </div>
+                            <img src="@item.Image" class="img-fluid" alt="Image">
+                        </div>
+                        <div class="why-text">
+                            <h4>@item.Name</h4>
+                            <h5>NT$@item.Price</h5>
+                        </div>
+                        <button class="btn btn-outline-success" id="@item.Id" type="submit" onclick="AddToBuyCart(this.id)" style="width:150px;height:38px;">加入購物車</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- End Products  -->

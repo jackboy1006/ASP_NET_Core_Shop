@@ -94,8 +94,8 @@ namespace ASP_NET_Core_Shop.Controllers
 		{
 			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 			ViewData.Clear();
-			return Content("已登出");
-			//return RedirectToPage("/Account/SignedOut");   // 登出，跳去另一頁。
+			//return Content("已登出");
+			return Redirect("HomePage");   // 登出，跳去另一頁。
 		}
 
 		#endregion
@@ -104,6 +104,12 @@ namespace ASP_NET_Core_Shop.Controllers
 
 		public IActionResult HomePage()
 		{
+			var _result = _repository.GetAllProducts();
+			return View(_result);
+		}
+
+		public IActionResult Products()
+        {
 			var _result = _repository.GetAllProducts();
 			return View(_result);
 		}

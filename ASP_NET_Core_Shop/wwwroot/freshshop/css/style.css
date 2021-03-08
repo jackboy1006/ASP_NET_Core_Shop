@@ -1502,7 +1502,7 @@ body {
 }
 /*------------------------------------------------------------------ All Pages -------------------------------------------------------------------*/
  .all-title-box{
-     background: url("../images/all-bg-title.jpg") no-repeat center center;
+     background: url("../../Images/pexels-cats-coming-2035738.jpg") no-repeat center center;
      -webkit-background-size: cover;
      -moz-background-size: cover;
      -ms-background-size: cover;
@@ -2034,8 +2034,8 @@ body {
      -ms-animation: bounceY 0.9s linear;
      animation: bounceY 0.9s linear;
 }
- .cart-box-main{
-     padding: 70px 0px;
+.cart-box-main {
+    padding: 70px 0px;
 }
  .table-main table thead{
      background: #b0b435;

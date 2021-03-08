@@ -5,6 +5,13 @@
 }
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link href="~/freshshop/css/style.css" rel="stylesheet">
+<style>
+    body {
+        color: #666666;
+        font-size: 14px;
+        font-family: Arial;
+    }
+</style>
 
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
     <div class="position-sticky pt-3">
@@ -34,12 +41,6 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="users"></span>
-                    使用者管理
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link active" asp-action="AdminOrders" asp-controller="Shop">
                     <span data-feather="bar-chart-2"></span>
                     訂單管理
@@ -47,130 +48,42 @@
             </li>
         </ul>
 
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Saved reports</span>
-            <a class="link-secondary" href="#" aria-label="Add a new report">
-                <span data-feather="plus-circle"></span>
-            </a>
-        </h6>
-        <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Current month
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Last quarter
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Social engagement
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Year-end sale
-                </a>
-            </li>
-        </ul>
+        
     </div>
 </nav>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    @*<section class="py-5 text-center container">
-            <div id="myDIV">
-                <button class="btn btn-primary my-2" value="0">所有商品</button>
-                <button class="btn btn-secondary my-2" value="1">蛋糕</button>
-                <button class="btn btn-secondary my-2" value="2">麵包</button>
-                <button class="btn btn-secondary my-2" value="3">甜點</button>
-                <button class="btn btn-secondary my-2" value="4">飲料</button>
-            </div>
-        </section>*@
-    <div class="cart-box-main">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="table-main table-responsive">
-                        <table class="table">
-                            <thead style="background-color: royalblue">
-                                <tr>
-                                    <th>訂單編號</th>
-                                    <th>訂單明細</th>
-                                    <th>收件人</th>
-                                    <th>收件人Email</th>
-                                    <th>收件人電話</th>
-                                    <th>寄送地址</th>
-                                    <th>金額</th>
-                                    <th>訂購時間</th>
-                                    <th>訂單狀態</th>
-                                    <th>縣市</th>
-                                    <th>確認更新</th>
-                                </tr>
-                            </thead>
-                            <tbody id="display">
-                                @*<tr>
-                                    <td>
-                                        OrderNum
-                                    </td>
-                                    <td>
-                                        <p><a data-toggle="collapse" href="#orderDetails" role="button" aria-expanded="false">檢視明細</a></p>
-                                        <div class="col-md-12 col-lg-12 collapse" id="orderDetails">
-                                            <div class="odr-box">
-                                                <div class="rounded p-2 bg-light">
-                                                    <div class="media mb-2 border-bottom">
-                                                        <div class="media-body">
-                                                            <a href="#">ProductName</a>
-                                                            <div class="small text-muted">單價: ProductPrice <span class="mx-2">|</span> 數量: Quantity <span class="mx-2">|</span> 金額: total</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p>BuyerName</p>
-                                    </td>
-                                    <td>
-                                        <p>BuyerEmail</p>
-                                    </td>
-                                    <td>
-                                        <p>BuyerPhone</p>
-                                    </td>
-                                    <td>
-                                        <p>ShipAddress</p>
-                                    </td>
-                                    <td>
-                                        <p>NT$Total</p>
-                                    </td>
-                                    <td>
-                                        <p>CreatedAt</p>
-                                    </td>
-                                    <td>
-                                        <select class="wide w-100" id="city" onclick="switchCity(this.value)" required>
-                                            <option value="已付款">已付款</option>
-                                            <option value="已出貨">已出貨</option>
-                                            <option value="取消中">取消中</option>
-                                            <option value="已完成">已完成</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <p>縣市</p>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="2" onclick="reply_click(this.id)">下架</button>
-                                    </td>
-                                </tr>*@
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <section class="py-5 text-center container">
+        <div id="myDIV">
+            <button class="btn btn-primary my-2" value="0">所有商品</button>
+            <button class="btn btn-secondary my-2" value="1">蛋糕</button>
+            <button class="btn btn-secondary my-2" value="2">麵包</button>
+            <button class="btn btn-secondary my-2" value="3">甜點</button>
+            <button class="btn btn-secondary my-2" value="4">飲料</button>
+        </div>
+    </section>
+    <div class="col-lg-12">
+        <div class="table-main table-responsive">
+            <table class="table">
+                <thead style="background-color: royalblue">
+                    <tr>
+                        <th>訂單編號</th>
+                        <th>訂單明細</th>
+                        <th>收件人</th>
+                        <th>收件人Email</th>
+                        <th>收件人電話</th>
+                        <th>寄送地址</th>
+                        <th>金額</th>
+                        <th>訂購時間</th>
+                        <th>訂單狀態</th>
+                        <th>縣市</th>
+                        <th>確認更新</th>
+                    </tr>
+                </thead>
+                <tbody id="display">
+                    
+                </tbody>
+            </table>
         </div>
     </div>
 </main>
