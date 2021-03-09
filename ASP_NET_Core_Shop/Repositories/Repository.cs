@@ -467,43 +467,53 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 			return "訂單完成更新!";
         }
 
-		public SellDataViewModel GetTop10Products()
+		public List<SellDataViewModel> GetProductsSellData()
 		{
 			var configurationBuilder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
 			IConfiguration config = configurationBuilder.Build();
 			string connectionString = config["ConnectionStrings:DBConnectionString"];
 
-			//using (SqlConnection Conn = new SqlConnection(connectionString))
-			//{
-			//	Conn.Open();
+            using (SqlConnection Conn = new SqlConnection(connectionString))
+            {
+                Conn.Open();
 
-			//	string sqlstr = "SELECT * FROM [OrderDetails] o " +
-			//		"LEFT JOIN [Products] p ON o.ProductName = p.Name " +
-			//		"LEFT JOIN [ProductTypes] pt ON p.TypeID = pt.id;";
-			//	var orderViewModels = Conn.Query<BuyCart, Product, UserTable, CreateOrderViewModel>(sqlstr,
-			//		(bt, pt, ut) => {
-			//			CreateOrderViewModel dtEntry = new CreateOrderViewModel();
-			//			OrderDetail orderDetail = new OrderDetail();
-			//			orderDetail.ProductName = bt.ProductName;
-			//			orderDetail.Quantity = bt.Quantity;
-			//			orderDetail.ProductPrice = pt.Price;
-			//			orderDetail.ProductImage = pt.Image;
-			//			dtEntry.userTable = ut;
-			//			dtEntry.orderDetail = orderDetail;
-			//			//查詢的同時 存取此使用者的所有購物車
-			//			if (bt.UserId == userId)
-			//			{
-			//				userCarts.Add(bt);
-			//			}
-
-			//			return dtEntry;
-			//		}, splitOn: "id,id").ToList();
-			//}
-			//SELECT p.id,ProductName,SUM(Quantity) as Num,SUM(Quantity * ProductPrice) as Total,p.TypeID,pt.Name FROM OrderDetails o
-			//LEFT JOIN Products p ON o.ProductName = p.Name
-			//LEFT JOIN ProductTypes pt ON p.TypeID = pt.id
-			//GROUP BY ProductName, p.TypeID ,pt.Name,p.id
-			return null;
+                string sqlstr = @"SELECT p.id, ProductName, SUM(Quantity) as Quantity,SUM(Quantity * ProductPrice) as Total, pt.Name as ProductType FROM [OrderDetails] o " +
+                    "LEFT JOIN [Products] p ON o.ProductName = p.Name " +
+                    "LEFT JOIN [ProductTypes] pt ON p.TypeID = pt.id " +
+					"GROUP BY ProductName, p.TypeID ,pt.Name,p.id " +
+					"ORDER BY Quantity DESC;";
+                var orderViewModels = Conn.Query<SellDataViewModel>(sqlstr).ToList();
+				return orderViewModels;
+			}
 		}
-	}
+
+        public DashBoardViewModel GetDashBoardData()
+        {
+			IQueryable<Order> getOrders = from o
+										  in _db.Orders
+										  select o;
+			var orders = getOrders.ToList();
+			DashBoardViewModel dashBoard = new DashBoardViewModel();
+
+			foreach (var item in orders)
+            {
+                if (item.CreatedAt.ToString("dddd") == "星期一")
+                    dashBoard.MondayTotal += item.Total;
+                else if (item.CreatedAt.ToString("dddd") == "星期二")
+					dashBoard.TuesdayTotal += item.Total;
+				else if (item.CreatedAt.ToString("dddd") == "星期三")
+					dashBoard.WednesdayTotal += item.Total;
+				else if (item.CreatedAt.ToString("dddd") == "星期四")
+					dashBoard.ThursdayTotal += item.Total;
+				else if (item.CreatedAt.ToString("dddd") == "星期五")
+					dashBoard.FridayTotal += item.Total;
+				else if (item.CreatedAt.ToString("dddd") == "星期六")
+					dashBoard.SaturdayTotal += item.Total;
+				else if (item.CreatedAt.ToString("dddd") == "星期日")
+					dashBoard.SundayTotal += item.Total;
+			}
+
+			return dashBoard;
+        }
+    }
 }

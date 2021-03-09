@@ -9,6 +9,7 @@ using ASP_NET_Core_Shop.Models;
 using System.IO;
 using ASP_NET_Core_Shop.Models.Repositories;
 using ASP_NET_Core_Shop.Models.ViewModels;
+using Newtonsoft.Json;
 
 namespace ASP_NET_Core_Shop.Controllers
 {
@@ -148,12 +149,51 @@ namespace ASP_NET_Core_Shop.Controllers
 
 			return Ok(result);
         }
-		[HttpPost]
-		[Route("GetTopSellData")]
-		public IActionResult GetTopSellData()
+		[Route("GetProductsSellData")]
+		public IActionResult GetProductsSellData()
 		{
-			var result = _repository.GetTop10Products();
-			return Ok(result);
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+			var result = _repository.GetProductsSellData();
+
+			return Ok(JsonConvert.SerializeObject(result));
+		}
+		[Route("GetDashBoardData")]
+		public IActionResult GetDashBoardData()
+        {
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
+			var result = _repository.GetDashBoardData();
+			return Ok(JsonConvert.SerializeObject(result));
 		}
 
 	}

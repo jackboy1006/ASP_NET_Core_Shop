@@ -8,6 +8,7 @@
   // Graphs
   var ctx = document.getElementById('myChart')
   // eslint-disable-next-line no-unused-vars
+
   var myChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -22,7 +23,7 @@
       ],
       datasets: [{
         data: [
-          30000,
+          40000,
           21345,
           18483,
           24003,

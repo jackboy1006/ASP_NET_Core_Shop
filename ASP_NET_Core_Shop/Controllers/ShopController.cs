@@ -395,7 +395,7 @@ namespace ASP_NET_Core_Shop.Controllers
 
 		public IActionResult TestList()
 		{
-			var _result = _repository.GetAllProducts();
+			var _result = _repository.GetProductsSellData();
 			return View(_result);
 		}
 

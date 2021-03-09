@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ASP_NET_Core_Shop.Models.ViewModels;
+using Newtonsoft.Json;
 
 namespace ASP_NET_Core_Shop.Models.Repositories
 {
@@ -35,6 +36,8 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 		List<Order> GetAllOrders();
 		string UpdateOrder(int id, Order order);
 
-		SellDataViewModel GetTop10Products();
+		List<SellDataViewModel> GetProductsSellData();
+
+		DashBoardViewModel GetDashBoardData();
 	}
 }
