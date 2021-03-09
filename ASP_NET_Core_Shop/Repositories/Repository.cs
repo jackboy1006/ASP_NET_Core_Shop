@@ -466,5 +466,44 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 			_db.SaveChanges();
 			return "訂單完成更新!";
         }
-    }
+
+		public SellDataViewModel GetTop10Products()
+		{
+			var configurationBuilder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+			IConfiguration config = configurationBuilder.Build();
+			string connectionString = config["ConnectionStrings:DBConnectionString"];
+
+			//using (SqlConnection Conn = new SqlConnection(connectionString))
+			//{
+			//	Conn.Open();
+
+			//	string sqlstr = "SELECT * FROM [OrderDetails] o " +
+			//		"LEFT JOIN [Products] p ON o.ProductName = p.Name " +
+			//		"LEFT JOIN [ProductTypes] pt ON p.TypeID = pt.id;";
+			//	var orderViewModels = Conn.Query<BuyCart, Product, UserTable, CreateOrderViewModel>(sqlstr,
+			//		(bt, pt, ut) => {
+			//			CreateOrderViewModel dtEntry = new CreateOrderViewModel();
+			//			OrderDetail orderDetail = new OrderDetail();
+			//			orderDetail.ProductName = bt.ProductName;
+			//			orderDetail.Quantity = bt.Quantity;
+			//			orderDetail.ProductPrice = pt.Price;
+			//			orderDetail.ProductImage = pt.Image;
+			//			dtEntry.userTable = ut;
+			//			dtEntry.orderDetail = orderDetail;
+			//			//查詢的同時 存取此使用者的所有購物車
+			//			if (bt.UserId == userId)
+			//			{
+			//				userCarts.Add(bt);
+			//			}
+
+			//			return dtEntry;
+			//		}, splitOn: "id,id").ToList();
+			//}
+			//SELECT p.id,ProductName,SUM(Quantity) as Num,SUM(Quantity * ProductPrice) as Total,p.TypeID,pt.Name FROM OrderDetails o
+			//LEFT JOIN Products p ON o.ProductName = p.Name
+			//LEFT JOIN ProductTypes pt ON p.TypeID = pt.id
+			//GROUP BY ProductName, p.TypeID ,pt.Name,p.id
+			return null;
+		}
+	}
 }

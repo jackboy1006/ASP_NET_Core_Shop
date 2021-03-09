@@ -60,16 +60,16 @@
 
     <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
-    <h2>Section title</h2>
+    <h2>銷售量 Top10</h2>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Header</th>
-                    <th>Header</th>
-                    <th>Header</th>
-                    <th>Header</th>
+                    <th>編號</th>
+                    <th>品名</th>
+                    <th>單價</th>
+                    <th>銷售數</th>
+                    <th>種類</th>
                 </tr>
             </thead>
             <tbody>
@@ -189,4 +189,28 @@
         </table>
     </div>
 </main>
-
+<script>
+    $(document).ready(function () {
+        fetch('http://localhost:59576/api/WebAPI/GetTopSellData', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(function (response) {
+            if (response.status == 401) {
+                alert("權限有誤! 請重新登入會員!");
+                throw new Error("HTTP status " + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data.product);
+            $.each(data, function (key, item) {
+                //console.log(item.product);
+            })
+        })
+        .catch(error => console.error('Unable to get items.', error));
+    })
+</script>

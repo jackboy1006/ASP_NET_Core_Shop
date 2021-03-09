@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using ASP_NET_Core_Shop.Models;
 using System.IO;
 using ASP_NET_Core_Shop.Models.Repositories;
+using ASP_NET_Core_Shop.Models.ViewModels;
 
 namespace ASP_NET_Core_Shop.Controllers
 {
@@ -147,6 +148,13 @@ namespace ASP_NET_Core_Shop.Controllers
 
 			return Ok(result);
         }
+		[HttpPost]
+		[Route("GetTopSellData")]
+		public IActionResult GetTopSellData()
+		{
+			var result = _repository.GetTop10Products();
+			return Ok(result);
+		}
 
 	}
 }

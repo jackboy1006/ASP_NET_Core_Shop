@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ASP_NET_Core_Shop.Models.ViewModels;
 
 namespace ASP_NET_Core_Shop.Models.Repositories
 {
@@ -33,5 +34,7 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 		string CancelOrder(int userId, int orderId);
 		List<Order> GetAllOrders();
 		string UpdateOrder(int id, Order order);
+
+		SellDataViewModel GetTop10Products();
 	}
 }
