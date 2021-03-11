@@ -79,7 +79,7 @@
 </main>
 <script>
     $(document).ready(function () {
-        fetch('http://localhost:59576/api/WebAPI/GetDashBoardData')
+        fetch('https://coreshopdemo.azurewebsites.net/api/WebAPI/GetDashBoardData')
             .then(function (response) {
                 if (response.status == 401) {
                     alert("權限有誤! 請重新登入會員!");
@@ -93,7 +93,7 @@
             })
             .catch(error => console.error('Unable to get items.', error));
 
-        fetch('http://localhost:59576/api/WebAPI/GetProductsSellData')
+        fetch('https://coreshopdemo.azurewebsites.net/api/WebAPI/GetProductsSellData')
         .then(function (response) {
             if (response.status == 401) {
                 alert("權限有誤! 請重新登入會員!");

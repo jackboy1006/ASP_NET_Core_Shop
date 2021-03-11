@@ -140,7 +140,7 @@
         formData.set('info', $("#productinfo").val())
         formData.set('stock', $("#productstock").val())
         formData.set('price', $("#productprice").val())
-        fetch('http://localhost:59576/api/WebAPI', {
+        fetch('https://coreshopdemo.azurewebsites.net/api/WebAPI', {
             method: 'POST',
             body: formData
         })

@@ -171,7 +171,7 @@
 </main>
 <script>
     function AddToBuyCart(productId) {
-        $.post('AddProductToBuyCart/' + productId)
+        $.post('/Shop/AddProductToBuyCart/' + productId)
             .done(function (message) {
                 alert(message);
             })

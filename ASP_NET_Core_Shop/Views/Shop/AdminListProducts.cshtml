@@ -83,7 +83,7 @@
 
 <script>
     $(document).ready(function () {
-        fetch('http://localhost:59576/api/WebAPI/GetAllProducts')
+        fetch('https://coreshopdemo.azurewebsites.net/api/WebAPI/GetAllProducts')
             .then(response => response.json())
             .then(data => {
                 $.each(data, function (key, item) {
@@ -137,7 +137,7 @@
     }
     function reply_click(id) {
         console.log(id);
-        fetch('http://localhost:59576/api/WebAPI/DiscontinueProduct/' + id, {
+        fetch('https://coreshopdemo.azurewebsites.net/api/WebAPI/DiscontinueProduct/' + id, {
             method: 'POST',
         })
             .then(response => response.json())

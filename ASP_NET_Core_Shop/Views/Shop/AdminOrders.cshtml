@@ -90,7 +90,7 @@
 <script>
     $(document).ready(function () {
         //$("#city").val("新北市");
-        fetch('http://localhost:59576/api/WebAPI/GetAllOrders', {
+        fetch('https://coreshopdemo.azurewebsites.net/api/WebAPI/GetAllOrders', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -212,7 +212,7 @@
         }
 
 
-        fetch('http://localhost:59576/api/WebAPI/Order/' + id, {
+        fetch('https://coreshopdemo.azurewebsites.net/api/WebAPI/Order/' + id, {
             method: 'PATCH',
             headers: {
                 'Accept': 'application/json',
