@@ -494,22 +494,22 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 										  select o;
 			var orders = getOrders.ToList();
 			DashBoardViewModel dashBoard = new DashBoardViewModel();
-
+			
 			foreach (var item in orders)
             {
-                if (item.CreatedAt.ToString("dddd") == "星期一")
+				if (item.CreatedAt.ToString("dddd") == "Monday")
                     dashBoard.MondayTotal += item.Total;
-                else if (item.CreatedAt.ToString("dddd") == "星期二")
+                else if (item.CreatedAt.ToString("dddd") == "Tuesday")
 					dashBoard.TuesdayTotal += item.Total;
-				else if (item.CreatedAt.ToString("dddd") == "星期三")
+				else if (item.CreatedAt.ToString("dddd") == "Wednesday")
 					dashBoard.WednesdayTotal += item.Total;
-				else if (item.CreatedAt.ToString("dddd") == "星期四")
+				else if (item.CreatedAt.ToString("dddd") == "Thursday")
 					dashBoard.ThursdayTotal += item.Total;
-				else if (item.CreatedAt.ToString("dddd") == "星期五")
+				else if (item.CreatedAt.ToString("dddd") == "Friday")
 					dashBoard.FridayTotal += item.Total;
-				else if (item.CreatedAt.ToString("dddd") == "星期六")
+				else if (item.CreatedAt.ToString("dddd") == "Saturday")
 					dashBoard.SaturdayTotal += item.Total;
-				else if (item.CreatedAt.ToString("dddd") == "星期日")
+				else if (item.CreatedAt.ToString("dddd") == "Sunday")
 					dashBoard.SundayTotal += item.Total;
 			}
 

@@ -4,7 +4,17 @@
     ViewData["Title"] = "CheckOut";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
-
+<!-- Start All Title Box -->
+<div class="all-title-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>訂購清單</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End All Title Box -->
 <div class="cart-box-main">
     <div class="container">
         <div class="row">
@@ -257,8 +267,8 @@
 
     $(document).ready(function () {
         console.log(@ViewData["usecoupon"]);
-        @{ 
-            
+        @{
+
             if (ViewData["usecoupon"] != null)
             {
                 @:discount = @int.Parse(ViewData["usecoupon"].ToString());

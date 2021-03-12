@@ -52,11 +52,11 @@
     <link href="~/css/signin.css" rel="stylesheet">
     <link href="~/css/mystytle.css" rel="stylesheet" />
 </head>
-<body class="text-center">
+<body class="d-flex h-100 text-center text-white bg-dark">
 
     <main class="form-signin">
         <form asp-action="Login">
-            <img class="mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+            <img class="mb-4" src="/Images/logo.png" alt="" width="250" height="250">
             <h1 class="h3 mb-3 fw-normal">登入會員</h1>
             @if (TempData["Message"] != null)
             {
@@ -73,11 +73,8 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" value="remember-me"> Remember me
-                </label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit">登入會員</button>
+            <button class="btn btn-outline-success" type="submit" style="width:200px;height:38px;">登入會員</button>
             <p class="mt-5 mb-3 text-muted">&copy; 此系統僅供練習用 請勿輸入真實資料! 2017–2021 </p>
         </form>
     </main>

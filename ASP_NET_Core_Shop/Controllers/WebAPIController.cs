@@ -193,13 +193,13 @@ namespace ASP_NET_Core_Shop.Controllers
 			}
 
 			var result = _repository.GetDashBoardData();
-            result.MondayTotal = 1000;
-            result.TuesdayTotal = 2000;
-            result.WednesdayTotal = 3000;
-            result.ThursdayTotal = 4000;
-            result.FridayTotal = 3000;
-            result.SaturdayTotal = 6000;
-            result.SundayTotal = 4000;
+            //result.MondayTotal = 1000;
+            //result.TuesdayTotal = 2000;
+            //result.WednesdayTotal = 3000;
+            //result.ThursdayTotal = 4000;
+            //result.FridayTotal = 3000;
+            //result.SaturdayTotal = 6000;
+            //result.SundayTotal = 4000;
             return Ok(JsonConvert.SerializeObject(result));
 		}
 
