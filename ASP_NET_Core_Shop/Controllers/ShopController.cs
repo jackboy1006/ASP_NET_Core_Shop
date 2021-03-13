@@ -42,7 +42,7 @@ namespace ASP_NET_Core_Shop.Controllers
 
 			if (userData == null)
 			{
-				TempData["Message"] = "無此帳號，請重新註冊!";
+				TempData["Message"] = "使用者名稱或密碼錯誤!";
 				return View();
 			}
 			string role;
@@ -79,6 +79,11 @@ namespace ASP_NET_Core_Shop.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult SignUp(UserTable _user)
 		{
+			if (!ModelState.IsValid)
+			{
+				TempData["Message"] = "資料未正確填寫";
+				return View();
+			}
 			bool check = _repository.AddUser(_user);
 			if (!check)
 			{
@@ -350,70 +355,6 @@ namespace ASP_NET_Core_Shop.Controllers
 		public IActionResult AccessDeny()
 		{
 			return View();
-		}
-		#endregion
-
-		#region Test
-		public IActionResult Testsql()
-        {
-			string userId = "";
-			ClaimsPrincipal principal = HttpContext.User;
-			if (principal != null)
-			{
-				foreach (Claim claim in principal.Claims)
-				{
-					if (claim.Type == "User_ID")
-					{
-						userId = claim.Value;
-					}
-				}
-			}
-			else
-			{
-				return StatusCode(401);
-			}
-			Order empty = new Order();
-
-			return View(_repository.CreateOrderAsync(Convert.ToInt32(userId), empty));
-		}
-
-		[Authorize]
-		public IActionResult TestLogin()
-		{
-			return View();
-		}
-		[Authorize(Roles = "Admin")]
-		public IActionResult TestAdminLogin()
-		{
-			return View();
-		}
-
-		public IActionResult TestCreate()
-        {
-			return View();
-        }
-
-		public IActionResult TestList()
-		{
-			var _result = _repository.GetProductsSellData();
-			return View(_result);
-		}
-
-		public IActionResult TestListBuyCart()
-		{
-			string userId = "";
-			ClaimsPrincipal principal = HttpContext.User;
-			if (principal != null)
-			{
-				foreach (Claim claim in principal.Claims)
-				{
-					if (claim.Type == "User_ID")
-					{
-						userId = claim.Value;
-					}
-				}
-			}
-			return View(_repository.GetUserBuyCart(Convert.ToInt32(userId)));
 		}
 		#endregion
 

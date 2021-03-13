@@ -4,6 +4,22 @@
     ViewData["Title"] = "BuyCart";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
+<style>
+    .all-title-box {
+        background: url("../../Images/pexels-svetlana-b-3913295.jpg") no-repeat center center;
+    }
+</style>
+
+<!-- Start All Title Box -->
+<div class="all-title-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>購物車</h2>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Start Cart  -->
 <div class="cart-box-main">
@@ -128,7 +144,7 @@
 
     function calculatorUpdate(productId, quantity) {
         var product = document.getElementById(`cart-product ${productId}`);
-        var price = product.querySelector("#product-price").textContent.replace("NT$","");
+        var price = product.querySelector("#product-price").textContent.replace("NT$", "");
         var total = product.querySelector("#product-total");
         total.textContent = `NT$  ${parseInt(price) * quantity}`;
         $.ajax({

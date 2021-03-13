@@ -34,6 +34,7 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 		List<Order> GetUserOrders(int userId);
 		string CancelOrder(int userId, int orderId);
 		List<Order> GetAllOrders();
+		List<Order> GetAllOrders(string city);
 		string UpdateOrder(int id, Order order);
 
 		List<SellDataViewModel> GetProductsSellData();

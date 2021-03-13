@@ -4,7 +4,22 @@
     ViewData["Title"] = "Order";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
+<style>
+    .all-title-box {
+        background: url("../../Images/SiteImgs/pexels-michael-morse-2606405.jpg") no-repeat center center;
+    }
+</style>
 
+<!-- Start All Title Box -->
+<div class="all-title-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>訂購清單</h2>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="cart-box-main">
     <div class="container">
         <div class="row">
@@ -69,7 +84,7 @@
                                         <p>@item.CreatedAt</p>
                                     </td>
                                     <td>
-                                        @{ 
+                                        @{
                                             var status = "";
                                             if (item.IsPaid && !item.IsShipped && !item.IsCancel && !item.IsDone)
                                             {
@@ -106,7 +121,7 @@
                                         }
                                     </td>
                                 </tr>
-                             }
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -123,17 +138,17 @@
                 'Content-Type': 'application/json'
             }
         })
-        .then(function (response) {
-            if (response.status == 401) {
-                alert("權限有誤! 請重新登入會員!");
-                throw new Error("HTTP status " + response.status);
-            }
-            return response.json();
-        })
-        .then((data) => {
-            alert(data);
-            window.location.href = "Order";
-        })
-        .catch(err => console.error('Unable to add order.', err))
+            .then(function (response) {
+                if (response.status == 401) {
+                    alert("權限有誤! 請重新登入會員!");
+                    throw new Error("HTTP status " + response.status);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                alert(data);
+                window.location.href = "Order";
+            })
+            .catch(err => console.error('Unable to add order.', err))
     }
 </script>

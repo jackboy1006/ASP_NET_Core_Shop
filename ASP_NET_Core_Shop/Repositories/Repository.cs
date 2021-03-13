@@ -449,7 +449,34 @@ namespace ASP_NET_Core_Shop.Models.Repositories
 			return orders;
 		}
 
-        public string UpdateOrder(int id, Order order)
+		public List<Order> GetAllOrders(string city)
+		{
+			IQueryable<Order> getOrders = from o
+										  in _db.Orders
+										  where o.ShipCity == city
+										  select new Order
+										  {
+											  Id = o.Id,
+											  UserId = o.UserId,
+											  OrderNum = o.OrderNum,
+											  BuyerName = o.BuyerName,
+											  BuyerEmail = o.BuyerEmail,
+											  BuyerPhone = o.BuyerPhone,
+											  ShipAddress = o.ShipAddress,
+											  ShipCity = o.ShipCity,
+											  IsPaid = o.IsPaid,
+											  IsCancel = o.IsCancel,
+											  IsShipped = o.IsShipped,
+											  IsDone = o.IsDone,
+											  Total = o.Total,
+											  CreatedAt = o.CreatedAt,
+											  OrderDetails = o.OrderDetails
+										  };
+			List<Order> orders = getOrders.ToList();
+			return orders;
+		}
+
+		public string UpdateOrder(int id, Order order)
         {
 			IQueryable<Order> getOrder = from o
 										 in _db.Orders

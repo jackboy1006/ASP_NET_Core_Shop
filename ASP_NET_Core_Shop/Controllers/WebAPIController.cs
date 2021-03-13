@@ -124,6 +124,31 @@ namespace ASP_NET_Core_Shop.Controllers
 			var result = _repository.GetAllOrders();
 			return Ok(result);
 		}
+
+		[HttpPost]
+		[Route("GetAllOrders/{city}")]
+		public IActionResult GetAllOrders(string city)
+		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
+			var result = _repository.GetAllOrders(city);
+			return Ok(result);
+		}
 		[HttpPatch]
 		[Route("Order/{id}")]
 		public IActionResult UpdateOrder(int id, Order order)

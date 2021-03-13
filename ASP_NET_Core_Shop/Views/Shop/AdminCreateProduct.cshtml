@@ -17,31 +17,31 @@
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="nav-link" asp-action="AdminHomePage" asp-controller="Shop">
-                    <span data-feather="home"></span>
+                    <span class="material-icons">trending_up</span>
                     總覽
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" asp-action="AdminCreateProduct" asp-controller="Shop">
-                    <span data-feather="file"></span>
+                    <span class="material-icons">add_shopping_cart</span>
                     上架商品
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-action="AdminListProducts" asp-controller="Shop">
-                    <span data-feather="shopping-cart"></span>
+                    <span class="material-icons">rule</span>
                     商品管理
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-action="AdminDiscontinuedProducts" asp-controller="Shop">
-                    <span data-feather="layers"></span>
+                    <span class="material-icons">remove_shopping_cart </span>
                     已下架商品
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-action="AdminOrders" asp-controller="Shop">
-                    <span data-feather="bar-chart-2"></span>
+                    <span class="material-icons">assignment</span>
                     訂單管理
                 </a>
             </li>
@@ -126,8 +126,6 @@
         </form>
     </div>
 </main>
-
-<script src="~/js/form-validation.js"></script>
 
 <script>
     function addProduct(form) {
