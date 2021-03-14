@@ -173,6 +173,7 @@
     function AddToBuyCart(productId) {
         $.post('/Shop/AddProductToBuyCart/' + productId)
             .done(function (message) {
+                console.log(message);
                 alert(message);
             })
             .fail(function (jqXHR, textStatus, err) {

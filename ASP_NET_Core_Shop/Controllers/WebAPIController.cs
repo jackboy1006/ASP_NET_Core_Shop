@@ -23,6 +23,10 @@ namespace ASP_NET_Core_Shop.Controllers
 			_repository = repository;
 		}
 
+		/// <summary>
+		/// 查詢已登入的使用者名稱
+		/// </summary>
+		/// <returns>使用者名稱</returns>
 		[HttpGet]
 		[Route("GetUserName")]
 		public string GetUserName()
@@ -39,48 +43,136 @@ namespace ASP_NET_Core_Shop.Controllers
 			}
 			if (name != "") return name;
 			return null;
-			//return "測試";
 		}
-        [HttpPost]
-        public IActionResult AddProduct(IFormCollection data, IFormFile productimage)
-        {
-            Task<string> str = _repository.AddProductAsync(data, productimage);
-            var result = new
-            {
-                message = str.Result,
-            };
-            //Product product = new Product
-            //{
-            //    TypeId = Convert.ToInt32(data["type"]),
-            //    Name = data["name"],
-            //    Info = data["info"],
-            //    Stock = Convert.ToInt32(data["stock"]),
-            //    Price = Convert.ToInt32(data["price"]),
-            //    Image = productimage.FileName,
-            //    Active = true
-            //};
-            return Ok(result);
-        }
+		/// <summary>
+		/// 新增產品
+		/// </summary>
+		/// <param name="data">產品資訊表單</param>
+		/// <param name="productimage">產品圖片</param>
+		/// <returns>結果訊息</returns>
+		/// <response code="200">回傳結果訊息</response>
+		/// <response code="401">登入驗證失敗</response>
+		[HttpPost]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+		public IActionResult AddProduct(IFormCollection data, IFormFile productimage)
+		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
+			Task<string> str = _repository.AddProductAsync(data, productimage);
+			var result = new
+			{
+				message = str.Result,
+			};
+			return Ok(result);
+		}
+		/// <summary>
+		/// 查詢所有上架產品
+		/// </summary>
+		/// <returns>所有產品</returns>
+		/// <response code="200">回傳所有上架產品</response>
+		/// <response code="401">登入驗證失敗</response>
 		[HttpGet]
 		[Route("GetAllProducts")]
+		[ProducesResponseType(typeof(List<Product>), 200)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		public IActionResult GetAllProducts()
-        {
+		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
 			var result = _repository.GetAllProducts();
 			return Ok(result);
-        }
-
+		}
+		/// <summary>
+		/// 查詢所有下架產品
+		/// </summary>
+		/// <returns></returns>
+		/// <response code="200">回傳所有下架產品</response>
+		/// <response code="401">登入驗證失敗</response>
 		[HttpGet]
 		[Route("GetAllDiscontinuedProducts")]
+		[ProducesResponseType(typeof(List<Product>), 200)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		public IActionResult GetAllDiscontinuedProducts()
 		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
 			var result = _repository.GetAllDiscontinuedProducts();
 			return Ok(result);
 		}
-
+		/// <summary>
+		/// 下架產品
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns>結果訊息</returns>
+		/// <response code="200">回傳結果訊息</response>
+		/// <response code="401">登入驗證失敗</response>
 		[HttpPost]
 		[Route("DiscontinueProduct/{id}")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		public IActionResult PostDiscontinueProduct(int id)
 		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
 			var str = _repository.DiscontinueProductAsync(id);
 			var result = new
 			{
@@ -88,11 +180,35 @@ namespace ASP_NET_Core_Shop.Controllers
 			};
 			return Ok(result);
 		}
-
+		/// <summary>
+		/// 刪除產品
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns>結果訊息</returns>
+		/// <response code="200">回傳結果訊息</response>
+		/// <response code="401">登入驗證失敗</response>
 		[HttpDelete]
 		[Route("Product/{id}")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		public IActionResult DeleteProduct(int id)
 		{
+			string userId = "";
+			ClaimsPrincipal principal = HttpContext.User;
+			if (principal != null)
+			{
+				foreach (Claim claim in principal.Claims)
+				{
+					if (claim.Type == "User_ID")
+					{
+						userId = claim.Value;
+					}
+				}
+			}
+			else
+			{
+				return StatusCode(401);
+			}
+
 			var str = _repository.DeleteProductAsync(id);
 			var result = new
 			{
@@ -100,10 +216,18 @@ namespace ASP_NET_Core_Shop.Controllers
 			};
 			return Ok(result);
 		}
+		/// <summary>
+		/// 查詢所有訂單
+		/// </summary>
+		/// <returns></returns>
+		/// <response code="200">回傳所有訂單</response>
+		/// <response code="401">登入驗證失敗</response>
 		[HttpPost]
 		[Route("GetAllOrders")]
+		[ProducesResponseType(typeof(List<Order>), 200)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		public IActionResult GetAllOrders()
-        {
+		{
 			string userId = "";
 			ClaimsPrincipal principal = HttpContext.User;
 			if (principal != null)
@@ -124,9 +248,17 @@ namespace ASP_NET_Core_Shop.Controllers
 			var result = _repository.GetAllOrders();
 			return Ok(result);
 		}
-
+		/// <summary>
+		/// 查詢特定城市所有訂單
+		/// </summary>
+		/// <param name="city"></param>
+		/// <returns></returns>
+		/// <response code="200">回傳城市所有訂單</response>
+		/// <response code="401">登入驗證失敗</response>
 		[HttpPost]
 		[Route("GetAllOrders/{city}")]
+		[ProducesResponseType(typeof(List<Order>), 200)]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		public IActionResult GetAllOrders(string city)
 		{
 			string userId = "";
@@ -149,8 +281,17 @@ namespace ASP_NET_Core_Shop.Controllers
 			var result = _repository.GetAllOrders(city);
 			return Ok(result);
 		}
+		/// <summary>
+		/// 更新訂單狀態
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="order"></param>
+		/// <returns></returns>
+		/// <response code="200">回傳結果訊息</response>
+		/// <response code="401">登入驗證失敗</response>
 		[HttpPatch]
 		[Route("Order/{id}")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		public IActionResult UpdateOrder(int id, Order order)
         {
 			string userId = "";
@@ -174,6 +315,30 @@ namespace ASP_NET_Core_Shop.Controllers
 
 			return Ok(result);
         }
+		/// <summary>
+		/// 查詢所有銷售統計
+		/// </summary>
+		/// <returns></returns>
+		/// <response code="200">
+		/// 回傳產品銷售資訊 
+		/// <remarks>
+		/// 
+		/// Response ViewModel:
+		///
+		///     [
+		///		  {
+		///			 "id": 1,
+		///			 "ProductName": "杯子蛋糕",
+		///			 "Quantity": 10,
+		///			 "Total": 2900,
+		///			 "ProductType": "蛋糕"
+		///		  }
+		///     ]
+		///
+		/// </remarks>
+		/// </response>
+		/// <response code="401">登入驗證失敗</response>
+		[HttpGet]
 		[Route("GetProductsSellData")]
 		public IActionResult GetProductsSellData()
 		{
@@ -197,6 +362,30 @@ namespace ASP_NET_Core_Shop.Controllers
 
 			return Ok(JsonConvert.SerializeObject(result));
 		}
+		/// <summary>
+		/// 查詢週統計資料
+		/// </summary>
+		/// <returns></returns>
+		/// <response code="200">
+		/// 回傳週統計資料
+		/// <remarks>
+		/// 
+		/// Response ViewModel:
+		///
+		///	{
+		///		"SundayTotal": 1000,
+		///		"MondayTotal": 2000,
+		///		"TuesdayTotal": 3000,
+		///		"WednesdayTotal": 4000,
+		///		"ThursdayTotal": 5000,
+		///		"FridayTotal": 6000,
+		///		"SaturdayTotal": 7000
+		///	}
+		///
+		/// </remarks>
+		/// </response>
+		/// <response code="401">登入驗證失敗</response>
+		[HttpGet]
 		[Route("GetDashBoardData")]
 		public IActionResult GetDashBoardData()
         {
@@ -218,13 +407,7 @@ namespace ASP_NET_Core_Shop.Controllers
 			}
 
 			var result = _repository.GetDashBoardData();
-            //result.MondayTotal = 1000;
-            //result.TuesdayTotal = 2000;
-            //result.WednesdayTotal = 3000;
-            //result.ThursdayTotal = 4000;
-            //result.FridayTotal = 3000;
-            //result.SaturdayTotal = 6000;
-            //result.SundayTotal = 4000;
+
             return Ok(JsonConvert.SerializeObject(result));
 		}
 
